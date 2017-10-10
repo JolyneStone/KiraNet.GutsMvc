@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// 用于描述一组特定对象的特性

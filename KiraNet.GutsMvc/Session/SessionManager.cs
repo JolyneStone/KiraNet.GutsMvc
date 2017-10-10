@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Net;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public class SessionManager : ISessionManager
     {

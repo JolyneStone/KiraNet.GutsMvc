@@ -1,7 +1,7 @@
-﻿//using KiraNet.GutsMVC.Implement;
+﻿//using KiraNet.GutsMvc.Implement;
 //using System;
 
-//namespace KiraNet.GutsMVC.Infrastructure
+//namespace KiraNet.GutsMvc.Infrastructure
 //{
 //    public sealed class ChildActionValueProviderFactory : IValueProviderFactory
 //    {

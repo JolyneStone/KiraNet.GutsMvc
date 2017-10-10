@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace KiraNet.GutsMVC.Implement
+namespace KiraNet.GutsMvc.Implement
 {
     /// <summary>
     /// 用于描述Controller

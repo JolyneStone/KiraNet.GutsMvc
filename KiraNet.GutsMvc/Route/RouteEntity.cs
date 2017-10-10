@@ -1,4 +1,4 @@
-﻿namespace KiraNet.GutsMVC.Route
+﻿namespace KiraNet.GutsMvc.Route
 {
     /// <summary>
     /// 当前所用的路由数据实体

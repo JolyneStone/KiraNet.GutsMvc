@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public class MultipartSection
     {

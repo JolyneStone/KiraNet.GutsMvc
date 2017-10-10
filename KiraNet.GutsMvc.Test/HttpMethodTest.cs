@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Xunit;
 
-namespace KiraNet.GutsMVC.Test
+namespace KiraNet.GutsMvc.Test
 {
     public class HttpMethodTest
     {

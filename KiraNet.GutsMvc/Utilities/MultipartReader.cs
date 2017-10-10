@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using KiraNet.GutsMVC.Helper;
+using KiraNet.GutsMvc.Helper;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public class MultipartReader
     {

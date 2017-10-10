@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public class HttpContextFactory : IHttpContextFactory
     {

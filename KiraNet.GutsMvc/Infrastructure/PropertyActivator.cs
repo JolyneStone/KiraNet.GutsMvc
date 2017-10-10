@@ -1,9 +1,9 @@
-﻿using KiraNet.GutsMVC.Helper;
+﻿using KiraNet.GutsMvc.Helper;
 using System;
 using System.Linq;
 using System.Reflection;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     internal class PropertyActivator<TContext>
     {

@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// A Stream that wraps another stream and enables rewinding by buffering the content as it is read.

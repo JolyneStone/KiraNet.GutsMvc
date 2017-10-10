@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public static class NameValueCollectionExtensions
     {

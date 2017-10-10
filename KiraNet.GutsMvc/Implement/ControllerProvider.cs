@@ -1,9 +1,10 @@
-﻿using KiraNet.GutsMVC.Helper;
+﻿using KiraNet.GutsMvc.Helper;
+using KiraNet.GutsMvc.Infrastructure;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace KiraNet.GutsMVC.Implement
+namespace KiraNet.GutsMvc.Implement
 {
     public class ControllerProvider : IControllerProvider
     {
@@ -36,7 +37,7 @@ namespace KiraNet.GutsMVC.Implement
             if (_assemblies == null || _assemblies.Length == 0)
             {
                 var locator = new AssemblyLocator();
-                _assemblies = locator.GetAssemblies();
+                _assemblies = locator.DependencyAssemblies().ToArray();
             }
         }
 

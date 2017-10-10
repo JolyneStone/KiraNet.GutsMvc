@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace KiraNet.GutsMVC.ModelBinder
+namespace KiraNet.GutsMvc.ModelBinder
 {
     public static class ModelBinders
     {

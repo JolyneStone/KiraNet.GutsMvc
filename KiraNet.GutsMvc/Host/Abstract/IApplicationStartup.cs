@@ -1,4 +1,4 @@
-﻿namespace KiraNet.GutsMVC
+﻿namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// 用于应用启动时的初始化工作，包括中间件的注册以及管道的构建

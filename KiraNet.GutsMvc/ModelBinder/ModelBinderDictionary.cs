@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace KiraNet.GutsMVC.ModelBinder
+namespace KiraNet.GutsMvc.ModelBinder
 {
     public class ModelBinderDictionary : IDictionary<Type, IModelBinder>, IModelBinderProvider
     {

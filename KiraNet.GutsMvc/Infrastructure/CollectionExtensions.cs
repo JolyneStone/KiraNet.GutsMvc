@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     internal static class CollectionExtensions
     {

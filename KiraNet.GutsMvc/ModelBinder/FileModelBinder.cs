@@ -1,7 +1,7 @@
-﻿using KiraNet.GutsMVC.Implement;
+﻿using KiraNet.GutsMvc.Implement;
 using System;
 
-namespace KiraNet.GutsMVC.ModelBinder
+namespace KiraNet.GutsMvc.ModelBinder
 {
     public class FileModelBinder : IModelBinder
     {

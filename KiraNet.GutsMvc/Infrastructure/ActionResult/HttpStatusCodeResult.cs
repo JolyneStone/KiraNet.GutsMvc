@@ -1,9 +1,9 @@
-﻿using KiraNet.GutsMVC.Implement;
+﻿using KiraNet.GutsMvc.Implement;
 using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public class HttpStatusCodeResult : IActionResult
     {

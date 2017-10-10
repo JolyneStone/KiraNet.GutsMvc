@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KiraNet.GutsMVC.MvcSample
+namespace KiraNet.GutsMvc.MvcSample
 {
     public class Program
     {

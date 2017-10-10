@@ -1,10 +1,10 @@
-﻿using KiraNet.GutsMVC.Implement;
+﻿using KiraNet.GutsMvc.Implement;
 using Newtonsoft.Json;
 using System;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public class JsonResult : IActionResult
     {

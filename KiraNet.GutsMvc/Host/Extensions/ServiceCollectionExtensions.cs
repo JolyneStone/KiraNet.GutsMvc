@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public static class ServiceCollectionExtensions
     {

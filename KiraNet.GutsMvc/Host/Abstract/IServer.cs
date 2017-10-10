@@ -1,4 +1,4 @@
-﻿namespace KiraNet.GutsMVC
+﻿namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// WEB框架服务器

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace KiraNet.GutsMVC.Infrastructure
+namespace KiraNet.GutsMvc.Infrastructure
 {
     ///// <summary>
     ///// 代表一种容器为可枚举的一种VauleProvider

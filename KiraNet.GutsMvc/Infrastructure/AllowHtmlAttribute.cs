@@ -1,7 +1,7 @@
-﻿using KiraNet.GutsMVC.Metadata;
+﻿using KiraNet.GutsMvc.Metadata;
 using System;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public class AllowHtmlAttribute : Attribute, IMatedataAware
     {

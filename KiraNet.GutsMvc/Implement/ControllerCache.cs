@@ -1,9 +1,9 @@
-﻿using KiraNet.GutsMVC.Helper;
+﻿using KiraNet.GutsMvc.Helper;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace KiraNet.GutsMVC.Implement
+namespace KiraNet.GutsMvc.Implement
 {
     public class ControllerCache
     {

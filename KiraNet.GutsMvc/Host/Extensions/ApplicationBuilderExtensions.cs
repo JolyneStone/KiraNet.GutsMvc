@@ -1,14 +1,25 @@
-﻿using KiraNet.GutsMVC.Route;
+﻿using KiraNet.GutsMvc.Route;
+using KiraNet.GutsMvc.View;
 using System;
 using System.Threading.Tasks;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public static class ApplicationBuilderExtensions
     {
         public static IApplicationBuilder UseSessionExpireTime(this IApplicationBuilder app, TimeSpan expireTime)
         {
             SessionExpireTimeConfigure.ExpireConfigure = expireTime;
+            return app;
+        }
+
+        public static IApplicationBuilder UseEngine(this IApplicationBuilder app, ViewEngine viewEngine)
+        {
+            if (viewEngine != null)
+            {
+                ViewEngine.Current = viewEngine;
+            }
+
             return app;
         }
 
@@ -35,7 +46,7 @@ namespace KiraNet.GutsMVC
             return app.Use(middleware);
         }
 
-        public static IApplicationBuilder UseGutsMVC(this IApplicationBuilder app, Action<RouteConfiguration> routeConfiguration)
+        public static IApplicationBuilder UseGutsMvc(this IApplicationBuilder app, Action<RouteConfiguration> routeConfiguration)
         {
             if (routeConfiguration == null)
             {
@@ -44,6 +55,12 @@ namespace KiraNet.GutsMVC
 
             // 注册路由
             routeConfiguration(RouteConfiguration.RouteConfig);
+
+            // 设置视图引擎，默认为Razor视图引擎
+            if (ViewEngine.Current == null)
+            {
+                ViewEngine.Current = new RazorViewEngine();
+            }
 
             return app.Use(new MvcHandler());
         }

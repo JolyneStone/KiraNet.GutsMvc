@@ -1,4 +1,4 @@
-﻿namespace KiraNet.GutsMVC
+﻿namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// WEB宿主，用于创建管道

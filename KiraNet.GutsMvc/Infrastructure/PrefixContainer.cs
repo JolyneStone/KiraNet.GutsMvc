@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace KiraNet.GutsMVC.Infrastructure
+namespace KiraNet.GutsMvc.Infrastructure
 {
     /// <summary>
     /// 表示一个前缀值的容器，用于规则化前缀点缀窗体，然后存储在一个排序的数组中

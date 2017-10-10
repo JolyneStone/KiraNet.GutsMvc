@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace KiraNet.GutsMVC.Helper
+namespace KiraNet.GutsMvc.Helper
 {
     internal class CryphtHelper
     {

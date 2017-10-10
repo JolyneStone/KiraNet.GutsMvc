@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// 此上下文是IHttpApplication的泛型参数
     /// 其本质是对当前HTTP请求上下文的封装
     /// </summary>
-    public class Context
+    public class Context : IDisposable
     {
         public HttpContext HttpContext { get; set; }
         /// <summary>
@@ -17,5 +17,27 @@ namespace KiraNet.GutsMVC
         /// 表示开始处理请求的时间戳
         /// </summary>
         public long StartTimestamp { get; set; }
+
+        private bool disposedValue = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    HttpContext.Request.RequestStream.Close();
+                    HttpContext.Response.ResponseStream.Close();
+                    Scope?.Dispose();
+                }
+
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
     }
 }

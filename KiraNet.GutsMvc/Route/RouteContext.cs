@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace KiraNet.GutsMVC.Route
+namespace KiraNet.GutsMvc.Route
 {
     public class RouteContext
     {

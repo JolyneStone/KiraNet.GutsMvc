@@ -1,4 +1,4 @@
-﻿namespace KiraNet.GutsMVC.Route
+﻿namespace KiraNet.GutsMvc.Route
 {
     public interface IRouteContext
     {

@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public class HttpResponseFeature : IHttpResponseFeature
     {

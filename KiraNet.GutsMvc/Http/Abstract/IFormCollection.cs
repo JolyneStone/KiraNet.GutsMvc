@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Primitives;
 using System.Collections.Generic;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// 表示HttpRequest的From值的集合

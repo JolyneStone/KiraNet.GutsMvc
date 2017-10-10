@@ -1,7 +1,7 @@
-﻿using KiraNet.GutsMVC.Route;
+﻿using KiraNet.GutsMvc.Route;
 using System;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// 表示对当前HTTP请求上下文的抽象

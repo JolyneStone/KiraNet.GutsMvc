@@ -6,9 +6,9 @@ using Microsoft.Extensions.Primitives;
 using System.Buffers;
 using System.Threading.Tasks;
 using System.Threading;
-using KiraNet.GutsMVC.Helper;
+using KiraNet.GutsMvc.Helper;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     ///补充：
     ///form的enctype属性为编码方式，常用有两 种：application/x-www-form-urlencoded和multipart/form-data

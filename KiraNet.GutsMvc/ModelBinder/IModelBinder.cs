@@ -1,6 +1,6 @@
-﻿using KiraNet.GutsMVC.Implement;
+﻿using KiraNet.GutsMvc.Implement;
 
-namespace KiraNet.GutsMVC.ModelBinder
+namespace KiraNet.GutsMvc.ModelBinder
 {
     public interface IModelBinder
     {

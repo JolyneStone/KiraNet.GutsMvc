@@ -1,4 +1,4 @@
-﻿namespace KiraNet.GutsMVC
+﻿namespace KiraNet.GutsMvc
 {
     public interface IHttpListenerContextFeature
     {

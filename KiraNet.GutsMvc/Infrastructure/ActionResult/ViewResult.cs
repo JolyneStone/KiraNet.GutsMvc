@@ -1,9 +1,9 @@
-﻿using KiraNet.GutsMVC.Implement;
-using KiraNet.GutsMVC.View;
+﻿using KiraNet.GutsMvc.Implement;
+using KiraNet.GutsMvc.View;
 using System;
 using System.Threading.Tasks;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public class ViewResult : IActionResult
     {
@@ -15,9 +15,9 @@ namespace KiraNet.GutsMVC
         public string FolderName { get; set; }
         public string ViewName { get; set; }
 
-        private IView FindView(ControllerContext controllerContext)
+        private IView GetView(ControllerContext controllerContext)
         {
-            return View ?? ViewEngines.Engines.FindView(controllerContext, FolderName, ViewName);
+            return View ?? ViewEngine.Current.CreateView(controllerContext, FolderName, ViewName);
         }
         public void ExecuteResult(ControllerContext context)
         {
@@ -28,7 +28,7 @@ namespace KiraNet.GutsMVC
 
             if (View == null)
             {
-                View = FindView(context);
+                View = GetView(context);
             }
 
             ViewContext viewContext = new ViewContext(context, Model);

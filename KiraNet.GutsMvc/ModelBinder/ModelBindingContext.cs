@@ -1,10 +1,10 @@
-﻿using KiraNet.GutsMVC.Infrastructure;
-using KiraNet.GutsMVC.Metadata;
+﻿using KiraNet.GutsMvc.Infrastructure;
+using KiraNet.GutsMvc.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace KiraNet.GutsMVC.ModelBinder
+namespace KiraNet.GutsMvc.ModelBinder
 {
     /// <summary>
     /// 模型绑定上下文对象

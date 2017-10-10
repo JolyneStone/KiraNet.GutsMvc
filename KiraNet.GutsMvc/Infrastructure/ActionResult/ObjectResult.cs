@@ -1,9 +1,9 @@
-﻿//using KiraNet.GutsMVC.Implement;
+﻿//using KiraNet.GutsMvc.Implement;
 //using Microsoft.Extensions.DependencyInjection;
 //using System;
 //using System.Threading.Tasks;
 
-//namespace KiraNet.GutsMVC
+//namespace KiraNet.GutsMvc
 //{
 //    public class ObjectResult : ActionResult
 //    {

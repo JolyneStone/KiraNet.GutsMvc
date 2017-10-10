@@ -1,0 +1,132 @@
+﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
+using System.Linq;
+
+namespace KiraNet.GutsMvc.View
+{
+    /// <summary>
+    /// 利用Roslyn进行动态编译
+    /// </summary>
+    internal class RazorRoslynCompiler : RoslynCompiler
+    {
+        //private static Assembly _rootAssembly = typeof(RoslynCompiler).GetTypeInfo().Assembly;
+
+        //public EmitResult CompileResult { get; private set; }
+        //public RazorRoslynCompiler(string layoutName):base()
+        //{
+        //    if (string.IsNullOrWhiteSpace(layoutName))
+        //    {
+        //        throw new ArgumentException(nameof(layoutName));
+        //    }
+
+        //    _viewClassName = layoutName;
+        //}
+
+        public RazorRoslynCompiler() : base()
+        {
+        }
+
+
+        /// <summary>
+        /// 编译Razor代码，最终生成一个代表Razor的类
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public override RazorPageViewBase Compile(string code, string className, string[] namespaces)
+        {
+            // 被我所注释的代码参考自 https://github.com/maxzhang1985/YOYOFx/blob/Dev/AspNetCore/YOYO.AspNetCore.ViewEngine.Razor/RoslynCompileService.cs
+            // 但在编译过程中，调用CSharpCompilation.Create方法时，需要引入netstandard2.0的程序集
+            // 而Object所在的程序集在编写代码阶段按F12查看是在netstandard2.0中
+            // 但由于GutsMVC调用方的不同可能为netcore或netframework等程序集
+            // 而为了避免硬编码，决定采用另一种方法
+
+            //var assemblyName = Path.GetRandomFileName();
+
+            //var sourceText = SourceText.From(code, Encoding.UTF8);
+            //var syntaxTree = CSharpSyntaxTree.ParseText(
+            //    sourceText,
+            //    new CSharpParseOptions(),
+            //    assemblyName);
+
+            ////var metadata = MetadataReference.CreateFromFile(this.GetType().Assembly.Location);
+            ////var metadata = MetadataReference.CreateFromFile(typeof(Object).Assembly.Location);
+            ////_applicationReferences.Add(metadata);
+            //var net = Assembly.Load(new AssemblyName("netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51"));
+            //var netReference = MetadataReference.CreateFromFile(net.Location);
+            //if(null==_applicationReferences.FirstOrDefault(x=>x.Display == netReference.Display))
+            //{
+            //    _applicationReferences.Add(netReference);
+            //}
+
+            //var compilation = CSharpCompilation.Create(
+            //    assemblyName,
+            //    new[] { syntaxTree },
+            //    _applicationReferences,
+            //    new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+
+            //using (var assemblyStream = new MemoryStream())
+            //{
+            //    CompileResult = compilation.Emit(
+            //        assemblyStream,
+            //        options: new EmitOptions(debugInformationFormat: DebugInformationFormat.PortablePdb));
+
+
+            //    // 编译不成功
+            //    if (!CompileResult.Success)
+            //    {
+            //        //var options = ScriptOptions.Default.AddReferences
+            //        //if (!compilation.References.Any() && !_applicationReferences.Any())
+            //        //{
+            //        //    throw new InvalidOperationException("编译Razor视图无法成功");
+            //        //}
+
+            //        return null;
+            //    }
+
+            //var templateType = LoadTypeForAssemblyStream(assemblyStream);
+            //return templateType;
+            //}
+
+            var a = typeof(object).Assembly.GetName();
+
+            var options = ScriptOptions.Default
+             .AddReferences(_applicationReferences);
+
+            var defaultNamespaces = new string[] { "System", "System.Threading.Tasks", "KiraNet.GutsMvc.View" };
+
+
+            if(namespaces!=null&&namespaces.Length>0)
+            {
+                defaultNamespaces = defaultNamespaces.Except(namespaces).ToArray();
+            }
+
+            options.AddImports(defaultNamespaces);
+
+            var result = CSharpScript.Create(code, options)
+                .ContinueWith($"new {className}()");
+            var value = result.RunAsync().ConfigureAwait(false).GetAwaiter().GetResult().ReturnValue;
+            var view = value as RazorPageViewBase;
+            return view;
+        }
+
+        //private Type LoadTypeForAssemblyStream(MemoryStream assemblyStream)
+        //{
+        //    assemblyStream.Seek(0, SeekOrigin.Begin);
+        //    Assembly assembly = AssemblyLoadContext.Default.LoadFromStream(assemblyStream);
+        //    var type = assembly.GetTypes().FirstOrDefault();
+        //    return type;
+        //}
+    }
+}
+
+
+//namespace KiraNet.GutsMvc.View
+//{
+//    using System.Threading.Tasks;
+//    public abstract class CompilerTestBaseClass
+//    {
+//        public abstract Task<string> Execute();
+
+//        public string Str { get; set; }
+//    }
+//}

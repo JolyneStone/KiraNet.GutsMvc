@@ -3,7 +3,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// 默认服务器
@@ -59,16 +59,21 @@ namespace KiraNet.GutsMVC
                     .Set<IHttpRequestFeature>(feature.RequestFeature)
                     .Set<IHttpResponseFeature>(feature.ResponseFeature);
 
-                TContext context = application.CreateContext(contextFeatures);
+                //TContext context = application.CreateContext(contextFeatures);
 
-                application.ProcessRequestAsync(context)
-                    .ContinueWith(_ =>
-                    {
-                        httpListenerContext.Request.InputStream.Close();
-                        httpListenerContext.Response.OutputStream.Close();
-                        httpListenerContext.Response.Close();
-                        application.DisposeContext(context, _.Exception);
-                    });
+                //application.ProcessRequestAsync(context)
+                //    .ContinueWith(_ =>
+                //    {
+                //        httpListenerContext.Request.InputStream.Close();
+                //        httpListenerContext.Response.OutputStream.Close();
+                //        httpListenerContext.Response.Close();
+                //        application.DisposeContext(context, _.Exception);
+                //    });
+
+                using (TContext context = application.CreateContext(contextFeatures))
+                {
+                    application.ProcessRequestAsync(context).ConfigureAwait(false).GetAwaiter().GetResult();
+                }
             });
         }
     }

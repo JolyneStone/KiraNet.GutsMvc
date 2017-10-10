@@ -1,4 +1,4 @@
-﻿namespace KiraNet.GutsMVC.Route
+﻿namespace KiraNet.GutsMvc.Route
 {
     // 封装对路由的处理
     public class Route : IRoute

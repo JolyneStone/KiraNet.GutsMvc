@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Primitives;
 using System;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public static class StringValuesExtensions
     {

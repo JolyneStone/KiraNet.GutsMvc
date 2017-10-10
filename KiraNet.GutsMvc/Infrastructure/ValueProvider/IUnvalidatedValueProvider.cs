@@ -1,4 +1,4 @@
-﻿namespace KiraNet.GutsMVC
+﻿namespace KiraNet.GutsMvc
 {
     // 表示是否跳过请求验证的的 IValueProvider
     //public interface IUnvalidatedValueProvider : IValueProvider

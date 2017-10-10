@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 
-namespace KiraNet.GutsMVC.Infrastructure
+namespace KiraNet.GutsMvc.Infrastructure
 {
     public class TypeActivatorCache : ITypeActivatorCache
     {

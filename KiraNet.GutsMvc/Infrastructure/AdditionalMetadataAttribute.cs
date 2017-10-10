@@ -1,7 +1,7 @@
-﻿using KiraNet.GutsMVC.Metadata;
+﻿using KiraNet.GutsMvc.Metadata;
 using System;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// 用于为Model元数据附加一些信息

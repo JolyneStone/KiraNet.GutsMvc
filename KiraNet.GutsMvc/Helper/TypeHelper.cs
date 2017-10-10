@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace KiraNet.GutsMVC.Helper
+namespace KiraNet.GutsMvc.Helper
 {
     internal static class TypeHelper
     {

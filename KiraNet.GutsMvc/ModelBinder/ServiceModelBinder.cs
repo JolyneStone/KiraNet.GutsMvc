@@ -1,7 +1,7 @@
-﻿using KiraNet.GutsMVC.Implement;
+﻿using KiraNet.GutsMvc.Implement;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace KiraNet.GutsMVC.ModelBinder
+namespace KiraNet.GutsMvc.ModelBinder
 {
     public class ServiceModelBinder : IModelBinder
     {

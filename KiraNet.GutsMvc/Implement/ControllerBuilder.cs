@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KiraNet.GutsMVC.Implement
+namespace KiraNet.GutsMvc.Implement
 {
     public class ControllerBuilder : IControllerBulider
     {

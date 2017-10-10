@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// 用于标记非Controller类

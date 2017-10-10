@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public static class CookieCollectionExtensions
     {

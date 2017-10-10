@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace KiraNet.GutsMVC.Infrastructure
+namespace KiraNet.GutsMvc.Infrastructure
 {
     /// <summary>
     /// 用于封装ValueProviderResult

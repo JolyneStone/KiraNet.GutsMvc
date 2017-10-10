@@ -1,4 +1,4 @@
-﻿using KiraNet.GutsMVC.Helper;
+﻿using KiraNet.GutsMvc.Helper;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,7 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace KiraNet.GutsMVC.Metadata
+namespace KiraNet.GutsMvc.Metadata
 {
     /// <summary>
     /// 表示元数据类

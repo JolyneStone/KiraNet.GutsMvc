@@ -1,4 +1,4 @@
-﻿namespace KiraNet.GutsMVC.Infrastructure
+﻿namespace KiraNet.GutsMvc.Infrastructure
 {
     public interface IValueProviderResultWrapper
     {

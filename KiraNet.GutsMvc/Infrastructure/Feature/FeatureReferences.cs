@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// 对Feature对象的一个引用，用来保存对应的Feature实例

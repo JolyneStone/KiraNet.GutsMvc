@@ -1,9 +1,9 @@
-﻿using KiraNet.GutsMVC.Metadata;
+﻿using KiraNet.GutsMvc.Metadata;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public class ViewDataDictionary : IDictionary<string, object>
     {

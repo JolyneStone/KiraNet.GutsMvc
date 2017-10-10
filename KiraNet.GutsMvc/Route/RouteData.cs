@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace KiraNet.GutsMVC.Route
+namespace KiraNet.GutsMvc.Route
 {
     public class RouteData : IDictionary<string, object>
     {

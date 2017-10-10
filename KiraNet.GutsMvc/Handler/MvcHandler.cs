@@ -1,9 +1,9 @@
-﻿using KiraNet.GutsMVC.Implement;
+﻿using KiraNet.GutsMvc.Implement;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     /// <summary>
-    /// GutsMVC的核心处理类
+    /// GutsMvc的核心处理类
     /// </summary>
     internal sealed class MvcHandler : IMiddlewareHandle
     {

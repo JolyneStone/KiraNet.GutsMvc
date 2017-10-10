@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public interface ISessionManager
     {

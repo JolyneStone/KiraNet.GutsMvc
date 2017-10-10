@@ -1,12 +1,7 @@
-﻿using KiraNet.GutsMVC.Implement;
-using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Collections.Specialized;
-using System.Text;
+﻿using System.Collections.Specialized;
 using Xunit;
 
-namespace KiraNet.GutsMVC.Test
+namespace KiraNet.GutsMvc.Test
 {
     public class NameValueCollectionValueProviderTest
     {

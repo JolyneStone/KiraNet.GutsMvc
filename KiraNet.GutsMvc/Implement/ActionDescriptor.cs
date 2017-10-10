@@ -1,13 +1,12 @@
-﻿using KiraNet.GutsMVC.Helper;
-using KiraNet.GutsMVC.Metadata;
-using KiraNet.GutsMVC.ModelBinder;
+﻿using KiraNet.GutsMvc.Helper;
+using KiraNet.GutsMvc.Metadata;
+using KiraNet.GutsMvc.ModelBinder;
 using System;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace KiraNet.GutsMVC.Implement
+namespace KiraNet.GutsMvc.Implement
 {
     /// <summary>
     /// 用于描述Action
@@ -23,6 +22,12 @@ namespace KiraNet.GutsMVC.Implement
             if (Action == null)
             {
                 return null;
+            }
+
+            var modelType = Action.GetCustomAttribute<ModelTypeAttribute>();
+            if (modelType != null)
+            {
+                context.ModelType = modelType.ModelType ?? null;
             }
 
             return Action.GetParameters()

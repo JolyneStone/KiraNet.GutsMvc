@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public interface IHttpRequestLifetimeFeature
     {

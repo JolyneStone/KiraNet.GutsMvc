@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace KiraNet.GutsMVC.Infrastructure
+namespace KiraNet.GutsMvc.Infrastructure
 {
     /// <summary>
     /// 旨在为目标Action方法提供输入参数的Model绑定的原始数据来源于当前的HTTP请求。

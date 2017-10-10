@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KiraNet.GutsMVC.Helper
+namespace KiraNet.GutsMvc.Helper
 {
     internal class PathHelper
     {

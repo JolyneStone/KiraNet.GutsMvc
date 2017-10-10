@@ -1,12 +1,12 @@
-﻿using KiraNet.GutsMVC.Implement;
+﻿using KiraNet.GutsMvc.Implement;
 
-namespace KiraNet.GutsMVC.View
+namespace KiraNet.GutsMvc.View
 {
     public interface IViewEngine
     {
     //    IView FindPartialView(ControllerContext controllerContext, string partialViewName);
 
-        IView FindView(ControllerContext controllerContext, string folderName, string viewName);
+        IView CreateView(ControllerContext controllerContext, string folderName, string viewName);
 
         //void ReleaseView(ControllerContext controllerContext, IView view);
     }

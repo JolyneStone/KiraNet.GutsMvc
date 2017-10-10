@@ -6,7 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     internal class HttpRequestFeature : IHttpRequestFeature
     {
@@ -20,14 +20,6 @@ namespace KiraNet.GutsMVC
             //            where request.Url.LocalPath.StartsWith(pathBase, StringComparison.OrdinalIgnoreCase)
             //            select pathBase).First();
         }
-
-        //public NameValueCollection Form
-        //{
-        //    get
-        //    {
-        //        return new NameValueCollection();
-        //    }
-        //}
 
         public Uri Url => _request.Url;
 
@@ -98,6 +90,24 @@ namespace KiraNet.GutsMVC
         public Func<Task<X509Certificate2>> GetClientCertificateAsync => _request.GetClientCertificateAsync;
 
 
-        Stream IHttpRequestFeature.RequestStream { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        private Stream _requestStream;
+
+        Stream IHttpRequestFeature.RequestStream
+        {
+            get
+            {
+                if(_requestStream==null)
+                {
+                    _requestStream = _request.InputStream;
+                }
+
+                return _requestStream;
+            }
+            set
+            {
+                _requestStream = value;
+            }
+
+        }
     }
 }

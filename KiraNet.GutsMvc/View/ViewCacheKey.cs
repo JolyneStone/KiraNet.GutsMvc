@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KiraNet.GutsMVC.View
+namespace KiraNet.GutsMvc.View
 {
     internal sealed class ViewCacheKey
     {

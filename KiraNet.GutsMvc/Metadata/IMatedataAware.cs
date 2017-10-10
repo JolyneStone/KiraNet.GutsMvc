@@ -1,5 +1,5 @@
 ﻿
-namespace KiraNet.GutsMVC.Metadata
+namespace KiraNet.GutsMvc.Metadata
 {
     /// <summary>
     /// 两个实现了该接口的特性分别是AdditionalMetadataAttribute、AllowHtmlAttribute

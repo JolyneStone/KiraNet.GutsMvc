@@ -1,8 +1,8 @@
-﻿//using KiraNet.GutsMVC.Route;
+﻿//using KiraNet.GutsMvc.Route;
 //using System;
 //using System.Globalization;
 
-//namespace KiraNet.GutsMVC.Infrastructure
+//namespace KiraNet.GutsMvc.Infrastructure
 //{
 //    public sealed class RouteDataValueProvider : ValueProvider<DictionaryValueProviderResultWrapper<object>>
 //    {

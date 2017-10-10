@@ -6,7 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// 用于描述与请求相关的特性，与HttpRequest具有类型的结构
@@ -114,6 +114,7 @@ namespace KiraNet.GutsMVC
         /// 获取客户端发送的正文数据的流
         /// </summary>
         Stream RequestStream { get; set; }
+
         string HttpMethod { get; }
         /// <summary>
         /// 请求中发送的标头名称/值对的集合

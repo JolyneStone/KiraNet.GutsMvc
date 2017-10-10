@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace KiraNet.GutsMVC.Metadata
+namespace KiraNet.GutsMvc.Metadata
 {
     /// <summary>
     /// 用于基于注解特性的声明式元数据

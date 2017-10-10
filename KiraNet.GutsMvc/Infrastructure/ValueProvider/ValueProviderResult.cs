@@ -3,7 +3,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace KiraNet.GutsMVC.Infrastructure
+namespace KiraNet.GutsMvc.Infrastructure
 {
     //public struct ValueProviderResult : IEquatable<ValueProviderResult>, IEnumerable<string>
     //{

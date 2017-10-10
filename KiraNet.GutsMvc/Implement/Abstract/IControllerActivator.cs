@@ -1,4 +1,4 @@
-﻿namespace KiraNet.GutsMVC.Implement
+﻿namespace KiraNet.GutsMvc.Implement
 {
     /// <summary>
     /// 激活Controller

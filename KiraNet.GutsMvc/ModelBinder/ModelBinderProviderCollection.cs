@@ -3,7 +3,7 @@
 //using System.Collections.ObjectModel;
 //using System.Text;
 
-//namespace KiraNet.GutsMVC.ModelBinder
+//namespace KiraNet.GutsMvc.ModelBinder
 //{
 //    public class ModelBinderProviderCollection : Collection<IModelBinderProvider>
 //    {

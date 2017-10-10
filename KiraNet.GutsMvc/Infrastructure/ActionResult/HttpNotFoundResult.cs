@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// 返回404状态码

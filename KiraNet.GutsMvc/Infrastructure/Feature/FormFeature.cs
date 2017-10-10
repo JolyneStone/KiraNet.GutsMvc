@@ -6,9 +6,9 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
-using KiraNet.GutsMVC.Helper;
+using KiraNet.GutsMvc.Helper;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public class FormFeature : IFormFeature
     {

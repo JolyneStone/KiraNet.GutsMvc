@@ -1,7 +1,7 @@
-﻿using KiraNet.GutsMVC.Route;
+﻿using KiraNet.GutsMvc.Route;
 using System;
 
-namespace KiraNet.GutsMVC.Implement
+namespace KiraNet.GutsMvc.Implement
 {
     /// <summary>
     /// 执行action的上下文对象

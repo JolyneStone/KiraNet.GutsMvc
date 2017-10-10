@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace KiraNet.GutsMVC.Metadata
+namespace KiraNet.GutsMvc.Metadata
 {
     public class MetadataAttributes
     {

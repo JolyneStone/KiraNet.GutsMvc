@@ -1,26 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using KiraNet.GutsMvc.Helper;
+using System.Collections.Generic;
 
-namespace KiraNet.GutsMVC.Route
+namespace KiraNet.GutsMvc.Route
 {
     public class RouteConfiguration
     {
         private static RouteConfiguration _routeConfig;
-        private static object _sync = new object();
+        private static KiraSpinLock _lock = new KiraSpinLock();
 
         // 单例模式
         public static RouteConfiguration RouteConfig
         {
             get
             {
-                if(_routeConfig == null)
+                if (_routeConfig == null)
                 {
-                    lock(_sync)
+                    _lock.Enter();
+                    if (_routeConfig == null)
                     {
-                        if(_routeConfig==null)
-                        {
-                            _routeConfig = new RouteConfiguration();
-                        }
+                        _routeConfig = new RouteConfiguration();
                     }
+                    _lock.Exit();
                 }
 
                 return _routeConfig;

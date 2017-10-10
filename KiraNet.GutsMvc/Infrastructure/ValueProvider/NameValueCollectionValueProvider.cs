@@ -2,7 +2,7 @@
 using System.Collections.Specialized;
 using System.Globalization;
 
-namespace KiraNet.GutsMVC.Infrastructure
+namespace KiraNet.GutsMvc.Infrastructure
 {
 
     public class NameValueCollectionValueProvider : ValueProvider<NameValueCollectionValueProviderResultWrapper>

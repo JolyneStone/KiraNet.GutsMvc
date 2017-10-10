@@ -3,9 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Reflection;
-using KiraNet.GutsMVC.Helper;
+using KiraNet.GutsMvc.Helper;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public static class WebHostBuilderExtensions
     {

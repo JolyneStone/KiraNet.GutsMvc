@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// <see cref="IHttpApplication{TContext}"/> 表示框架针对HTTP请求的方法集合

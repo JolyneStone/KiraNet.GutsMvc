@@ -1,11 +1,12 @@
-﻿using KiraNet.GutsMVC.Metadata;
+﻿using KiraNet.GutsMvc.Metadata;
+using KiraNet.GutsMvc.View;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Text;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public class WebHost : IWebHost
     {

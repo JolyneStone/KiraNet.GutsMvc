@@ -1,13 +1,13 @@
-﻿using KiraNet.GutsMVC.Implement;
-using KiraNet.GutsMVC.Infrastructure;
-using KiraNet.GutsMVC.Route;
+﻿using KiraNet.GutsMvc.Implement;
+using KiraNet.GutsMvc.Infrastructure;
+using KiraNet.GutsMvc.Route;
 using System;
 using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// Controller的抽象类
@@ -17,9 +17,8 @@ namespace KiraNet.GutsMVC
         private IValueProvider _valueProvider;
         private ControllerContext _controllerContext;
         private ViewDataDictionary _viewDataDictionary;
-        // 由于在NVelocity中TempData和ViewBag都不够好用，所以这里只能舍弃，而只保留ViewData
-        //private TempDataDictionary _tempDataDictionary;
-        //private DynamicViewBag _viewBag;
+        private TempDataDictionary _tempDataDictionary;
+        private DynamicViewBag _viewBag;
         private IActionInvoker _actionInvoker;
 
         public HttpContext HttpContext => ControllerContext?.HttpContext;
@@ -78,31 +77,31 @@ namespace KiraNet.GutsMVC
             }
         }
 
-        //public TempDataDictionary TempData
-        //{
-        //    get
-        //    {
-        //        if (_tempDataDictionary == null)
-        //        {
-        //            _tempDataDictionary = new TempDataDictionary();
-        //        }
+        public TempDataDictionary TempData
+        {
+            get
+            {
+                if (_tempDataDictionary == null)
+                {
+                    _tempDataDictionary = new TempDataDictionary();
+                }
 
-        //        return _tempDataDictionary;
-        //    }
-        //}
+                return _tempDataDictionary;
+            }
+        }
 
-        //public dynamic ViewBag
-        //{
-        //    get
-        //    {
-        //        if(_viewBag==null)
-        //        {
-        //            _viewBag = new DynamicViewBag(ViewData);
-        //        }
+        public dynamic ViewBag
+        {
+            get
+            {
+                if (_viewBag == null)
+                {
+                    _viewBag = new DynamicViewBag(ViewData);
+                }
 
-        //        return _viewBag;
-        //    }
-        //}
+                return _viewBag;
+            }
+        }
 
         public IValueProvider ValueProvider
         {

@@ -1,4 +1,4 @@
-﻿using KiraNet.GutsMVC.Route;
+﻿using KiraNet.GutsMvc.Route;
 using System;
 using System.Collections.Specialized;
 using System.IO;
@@ -7,7 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public abstract class HttpRequest
     {
@@ -106,7 +106,7 @@ namespace KiraNet.GutsMVC
         /// <summary>
         /// 获取客户端发送的正文数据的流
         /// </summary>
-        public abstract Stream RequestStream { get; internal set; }
+        public abstract Stream RequestStream { get; set; }
         /// <summary>
         /// 获取HTTP方法类型
         /// </summary>

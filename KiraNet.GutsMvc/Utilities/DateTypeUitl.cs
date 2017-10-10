@@ -2,7 +2,7 @@
 //using System.Collections.Generic;
 //using System.ComponentModel.DataAnnotations;
 
-//namespace KiraNet.GutsMVC
+//namespace KiraNet.GutsMvc
 //{
 //    internal static class DataTypeUtil
 //    {

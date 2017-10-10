@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// 表示一个宿主应用，是对IHttpApplication的默认实现

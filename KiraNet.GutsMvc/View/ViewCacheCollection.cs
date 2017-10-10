@@ -2,7 +2,7 @@
 //using System.Collections.Concurrent;
 //using System.Collections.Generic;
 
-//namespace KiraNet.GutsMVC.View
+//namespace KiraNet.GutsMvc.View
 //{
 //    internal sealed class ViewCacheCollection:IEnumerable<KeyValuePair<ViewCacheKey, IView>>
 //    {

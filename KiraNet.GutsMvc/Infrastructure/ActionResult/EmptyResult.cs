@@ -1,7 +1,7 @@
-﻿using KiraNet.GutsMVC.Implement;
+﻿using KiraNet.GutsMvc.Implement;
 using System.Threading.Tasks;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// EmptyResult表示不对请求做出响应，即我们只接收请求而不发送任何有效的信息

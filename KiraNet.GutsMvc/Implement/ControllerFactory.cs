@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace KiraNet.GutsMVC.Implement
+namespace KiraNet.GutsMvc.Implement
 {
     public class ControllerFactory : IControllerFactory
     {

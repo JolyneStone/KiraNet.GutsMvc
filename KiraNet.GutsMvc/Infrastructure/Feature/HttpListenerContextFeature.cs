@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// 由于HttpListenerServer采用一个HttpListener对象作为监听器，由它接收的请求将被封装成一个类型为HttpListenerContext的上下文对象。

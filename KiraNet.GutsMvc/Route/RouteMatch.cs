@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace KiraNet.GutsMVC.Route
+namespace KiraNet.GutsMvc.Route
 {
     // 根据RouteData和RouteMap 匹配路由
     public class RouteMatch : IRouteMatch

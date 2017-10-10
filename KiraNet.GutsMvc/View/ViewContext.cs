@@ -1,6 +1,7 @@
-﻿using KiraNet.GutsMVC.Implement;
+﻿using KiraNet.GutsMvc.Implement;
+using System;
 
-namespace KiraNet.GutsMVC.View
+namespace KiraNet.GutsMvc.View
 {
     public class ViewContext/* : ControllerContext*/
     {
@@ -22,17 +23,19 @@ namespace KiraNet.GutsMVC.View
             //ViewName = controllerContext.ActionDescriptor.ActionName;
             _controllerContext = controllerContext ?? throw new System.ArgumentNullException(nameof(controllerContext));
             Model = model;
+            ModelType = controllerContext.ModelType;
         }
 
 
         //public string FolderName { get; }
         //public string ViewName { get; set; }
         public object Model { get; }
+        public Type ModelType { get; }
         public HttpContext HttpContext => _controllerContext.HttpContext;
         public ViewDataDictionary ViewData => _controllerContext.Controller.ViewData;
+        public TempDataDictionary TempData => _controllerContext.Controller.TempData;
+        public DynamicViewBag ViewBag => _controllerContext.Controller.ViewBag;
         //public RouteEntity RouteEntity { get; }
-        //public TempDataDictionary TempData => _controllerContext.Controller.TempData;
-        //public DynamicViewBag ViewBag => _controllerContext.Controller.ViewBag;
         //public IView View { get; set; }
         ////public TextWriter Writer { get; set; }
         //public TypeInfo ControllerInfo { get; }

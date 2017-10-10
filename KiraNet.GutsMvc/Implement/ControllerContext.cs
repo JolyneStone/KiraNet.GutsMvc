@@ -1,7 +1,8 @@
-﻿using KiraNet.GutsMVC.Route;
+﻿using KiraNet.GutsMvc.Route;
+using System;
 using System.Reflection;
 
-namespace KiraNet.GutsMVC.Implement
+namespace KiraNet.GutsMvc.Implement
 {
     public class ControllerContext : ActionContext
     {
@@ -13,6 +14,7 @@ namespace KiraNet.GutsMVC.Implement
         internal ControllerDescriptor ControllerDescriptor { get; set; }
         internal ActionDescriptor ActionDescriptor { get; set; }
         internal ParameterDescriptor[] ParameterDescriptors { get; set; }
+        internal Type ModelType { get; set; }
         public Controller Controller { get; set; }
         public ControllerContext() { }
         public ControllerContext(ActionContext context)

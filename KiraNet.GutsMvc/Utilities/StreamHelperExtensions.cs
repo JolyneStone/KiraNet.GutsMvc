@@ -1,7 +1,7 @@
 ﻿using System.Buffers;
 using System.IO;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     public static class StreamHelperExtensions
     {

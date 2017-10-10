@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// 表示服务器监听地址

@@ -1,6 +1,7 @@
 ﻿using System;
+using System.IO;
 
-namespace KiraNet.GutsMVC.View
+namespace KiraNet.GutsMvc.View
 {
     public class ViewPath
     {
@@ -9,9 +10,9 @@ namespace KiraNet.GutsMVC.View
         {
             get
             {
-                if(_viewPath==null)
+                if (String.IsNullOrWhiteSpace(_viewPath))
                 {
-                    _viewPath = AppContext.BaseDirectory;
+                    _viewPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(),"Views");
                 }
 
                 return _viewPath;
@@ -20,12 +21,12 @@ namespace KiraNet.GutsMVC.View
 
         public ViewPath(string viewPath)
         {
-            if(viewPath == null && viewPath.Length == 0)
+            if (viewPath == null && viewPath.Length == 0)
             {
                 throw new ArgumentNullException(nameof(viewPath));
             }
 
-            _viewPath = viewPath;
+            _viewPath = System.IO.Path.Combine(viewPath, "Views");
         }
     }
 }

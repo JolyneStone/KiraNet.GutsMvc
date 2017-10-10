@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KiraNet.GutsMVC.ModelBinder
+namespace KiraNet.GutsMvc.ModelBinder
 {
     public interface IModelBinderProvider
     {

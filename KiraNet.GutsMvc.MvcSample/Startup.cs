@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace KiraNet.GutsMVC.MvcSample
+namespace KiraNet.GutsMvc.MvcSample
 {
     public class Startup : IStartup
     {
@@ -8,9 +8,9 @@ namespace KiraNet.GutsMVC.MvcSample
         {
             // 注册中间件
             //app.UseTest(@"C:\Users\99752\Pictures");
-            app.UseGutsMVC(route=> 
-                route.AddRouteMap("default", "/{controller=home}/{action=index}/{id}"))
-            .ConfigureViews(@"D:\Code\KiraNet.GutsMVC\KiraNet.GutsMVC.MvcSample\Views");
+            app.UseGutsMvc(route =>
+                route.AddRouteMap("default", "/{controller=home}/{action=index}/{id}"));
+            //.ConfigureViews(@"D:\Code\KiraNet.GutsMvc\KiraNet.GutsMvc.MvcSample");
         }
 
         public void ConfigureServices(IServiceCollection services)

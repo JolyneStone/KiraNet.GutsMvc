@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace KiraNet.GutsMVC.Implement
+namespace KiraNet.GutsMvc.Implement
 {
     // 我们先用表达式构造出委托Fun<ControllerType, object[], ReturnType>
     // 其中ControllerType、object[]、ReturnType分别为控制器类型、Action方法参数数组和返回值类型

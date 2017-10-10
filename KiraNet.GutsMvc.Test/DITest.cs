@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace KiraNet.GutsMVC.Test
+namespace KiraNet.GutsMvc.Test
 {
     public interface IT
     {

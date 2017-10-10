@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace KiraNet.GutsMVC.Metadata
+namespace KiraNet.GutsMvc.Metadata
 {
     public class DefaultModelMetadataProvider : ModelMetadataProvider
     {

@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace KiraNet.GutsMVC.Infrastructure
+namespace KiraNet.GutsMvc.Infrastructure
 {
     public sealed class FormCollectionValueProviderResultWrapper : ValueProviderResultWrapper<IFormCollection>
     {

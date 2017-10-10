@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace KiraNet.GutsMVC.Implement
+namespace KiraNet.GutsMvc.Implement
 {
     public class ControllerFactoryProvider: IControllerFactoryProvider
     {

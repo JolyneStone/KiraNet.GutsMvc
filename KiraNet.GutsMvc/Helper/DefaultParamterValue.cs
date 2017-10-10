@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace KiraNet.GutsMVC.Helper
+namespace KiraNet.GutsMvc.Helper
 {
     public class DefaultParamterValue
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Net.Http.Headers;
 using System;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// Various extensions for converting multipart sections

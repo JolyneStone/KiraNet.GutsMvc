@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace KiraNet.GutsMVC.Helper
+namespace KiraNet.GutsMvc.Helper
 {
     /// <summary>
     /// 简单自旋锁

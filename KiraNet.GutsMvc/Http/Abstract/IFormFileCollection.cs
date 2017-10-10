@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// 表示Request.From.Files的集合

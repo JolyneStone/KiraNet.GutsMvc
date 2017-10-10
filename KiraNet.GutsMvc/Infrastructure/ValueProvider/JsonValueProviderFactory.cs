@@ -1,4 +1,4 @@
-﻿using KiraNet.GutsMVC.Implement;
+﻿using KiraNet.GutsMvc.Implement;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 
-namespace KiraNet.GutsMVC.Infrastructure
+namespace KiraNet.GutsMvc.Infrastructure
 {
     /// <summary>
     /// 特殊的<see cref="IValueProviderFactory"/>，用于将JSON格式的请求内容转换成字典对象，并据此创建一个DictionaryValueProvider

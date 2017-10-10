@@ -5,9 +5,9 @@ using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-using KiraNet.GutsMVC.Route;
+using KiraNet.GutsMvc.Route;
 
-namespace KiraNet.GutsMVC
+namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// 默认HTTP请求对象
@@ -78,11 +78,7 @@ namespace KiraNet.GutsMVC
 
         public override IPEndPoint RemoteEndPoint => RequestFeature.RemoteEndPoint;
 
-        public override Stream RequestStream
-        {
-            get => RequestFeature.RequestStream;
-            internal set => RequestFeature.RequestStream = value;
-        }
+        public override Stream RequestStream { get => RequestFeature.RequestStream; set => RequestFeature.RequestStream = value; }
 
         public override Guid RequestTraceIdentifier => RequestFeature.RequestTraceIdentifier;
 

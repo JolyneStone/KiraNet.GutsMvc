@@ -1,8 +1,8 @@
-﻿using KiraNet.GutsMVC.Implement;
+﻿using KiraNet.GutsMvc.Implement;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace KiraNet.GutsMVC.Infrastructure
+namespace KiraNet.GutsMvc.Infrastructure
 {
     public class ValueProviderFactoryCollection : Collection<IValueProviderFactory>
     {

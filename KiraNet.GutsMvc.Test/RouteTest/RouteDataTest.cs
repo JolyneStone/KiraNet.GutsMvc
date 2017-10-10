@@ -1,8 +1,8 @@
-﻿using KiraNet.GutsMVC.Route;
+﻿using KiraNet.GutsMvc.Route;
 using System;
 using Xunit;
 
-namespace KiraNet.GutsMVC.Test.RouteTest
+namespace KiraNet.GutsMvc.Test.RouteTest
 {
     public class RouteDataTest
     {

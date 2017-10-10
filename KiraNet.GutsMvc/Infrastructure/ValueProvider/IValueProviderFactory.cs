@@ -1,6 +1,6 @@
-﻿using KiraNet.GutsMVC.Implement;
+﻿using KiraNet.GutsMvc.Implement;
 
-namespace KiraNet.GutsMVC.Infrastructure
+namespace KiraNet.GutsMvc.Infrastructure
 {
     /// <summary>
     /// <see cref="IValueProviderFactory"/>是创建ValueProvider的抽象工厂

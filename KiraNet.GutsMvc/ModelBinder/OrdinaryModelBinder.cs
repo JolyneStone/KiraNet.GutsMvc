@@ -1,7 +1,7 @@
-﻿using KiraNet.GutsMVC.Helper;
-using KiraNet.GutsMVC.Implement;
-using KiraNet.GutsMVC.Infrastructure;
-using KiraNet.GutsMVC.Metadata;
+﻿using KiraNet.GutsMvc.Helper;
+using KiraNet.GutsMvc.Implement;
+using KiraNet.GutsMvc.Infrastructure;
+using KiraNet.GutsMvc.Metadata;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace KiraNet.GutsMVC.ModelBinder
+namespace KiraNet.GutsMvc.ModelBinder
 {
     public class OrdinaryModelBinder : IModelBinder
     {

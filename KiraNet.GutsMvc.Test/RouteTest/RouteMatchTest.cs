@@ -1,8 +1,8 @@
-﻿using KiraNet.GutsMVC.Route;
+﻿using KiraNet.GutsMvc.Route;
 using System;
 using Xunit;
 
-namespace KiraNet.GutsMVC.Test.RouteTest
+namespace KiraNet.GutsMvc.Test.RouteTest
 {
     public class RouteMatchTest
     {
@@ -12,7 +12,7 @@ namespace KiraNet.GutsMVC.Test.RouteTest
             RouteConfiguration routeConfiguration = RouteConfiguration.RouteConfig;
             routeConfiguration.AddRouteMap("default", "/{controller=home}/{action=index}/{id?}");
 
-            IRoute route = new KiraNet.GutsMVC.Route.Route(new RouteMatch());
+            IRoute route = new KiraNet.GutsMvc.Route.Route(new RouteMatch());
             var routeEntity = route.GetRouteEntity(routeConfiguration, "/home/index/1");
 
             Assert.True(EqualsRouteEntity(routeEntity, new RouteEntity() { Controller="home", Action="index", DefaultParameter="id", ParameterValue = "1" }));

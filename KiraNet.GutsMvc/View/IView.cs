@@ -1,4 +1,4 @@
-﻿namespace KiraNet.GutsMVC.View
+﻿namespace KiraNet.GutsMvc.View
 {
     /// <summary>
     /// 表示一个View
