@@ -15,16 +15,20 @@ namespace KiraNet.GutsMvc
 
         public WebHost(IServiceCollection services, IConfiguration config)
         {
-            _serviceProvider = services.BuildServiceProvider();
+            _serviceProvider = services
+                //.AddScoped<IHttpContextCache, HttpContextCache>()
+                //.AddMemoryCache()
+                .BuildServiceProvider();
             _config = config;
 
+            //new DefaultModelMetadataProvider(_serviceProvider.GetRequiredService<IMemoryCache>());
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // 支持中文编码
         }
 
         public void Start()
         {
             // 真正完成中间件注册
-            IApplicationBuilder applicationBuilder = _serviceProvider.GetRequiredService<IApplicationBuilder>();
+            IApplicationBuilder applicationBuilder = new ApplicationBuilder();// _serviceProvider.GetRequiredService<IApplicationBuilder>();
             _serviceProvider.GetRequiredService<IApplicationStartup>().Configure(applicationBuilder);
 
             IServer server = _serviceProvider.GetRequiredService<IServer>();
@@ -35,8 +39,6 @@ namespace KiraNet.GutsMvc
             {
                 addressFeatures.Addresses.Add(address);
             }
-
-            new DefaultModelMetadataProvider(_serviceProvider.GetRequiredService<IMemoryCache>());
 
             server.Run(new HostingApplication(applicationBuilder.Build(), _serviceProvider));
         }

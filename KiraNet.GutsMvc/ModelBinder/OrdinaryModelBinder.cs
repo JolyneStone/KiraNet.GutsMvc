@@ -8,12 +8,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace KiraNet.GutsMvc.ModelBinder
 {
     public class OrdinaryModelBinder : IModelBinder
     {
         private ModelBinderDictionary _binders;
+        private IModelMetadataProvider _metadataProvider;
 
         internal ModelBinderDictionary Binders
         {
@@ -22,7 +24,7 @@ namespace KiraNet.GutsMvc.ModelBinder
                 if (_binders == null)
                 {
                     _binders = ModelBinders.Binders;
-                    if (_binders.ContainsKey(typeof(IModelBinder)))
+                    if (!_binders.ContainsKey(typeof(IModelBinder)))
                     {
                         _binders.Add(typeof(IModelBinder), this);
                     }
@@ -34,6 +36,25 @@ namespace KiraNet.GutsMvc.ModelBinder
             {
                 _binders = value;
             }
+        }
+
+        private IModelMetadataProvider ModelMetadataProvider
+        {
+            get
+            {
+                if(_metadataProvider == null)
+                {
+                    _metadataProvider = _services.GetRequiredService<IModelMetadataProvider>();
+                }
+
+                return _metadataProvider;
+            }
+        }
+
+        private IServiceProvider _services;
+
+        public OrdinaryModelBinder()
+        {
         }
 
 
@@ -49,7 +70,7 @@ namespace KiraNet.GutsMvc.ModelBinder
                 throw new ArgumentNullException(nameof(bindingContext));
             }
 
-            if (!String.IsNullOrWhiteSpace(bindingContext.ModelName) &&
+            if (bindingContext.ModelName != null &&
                 !bindingContext.ValueProvider.ContainsPrefix(bindingContext.ModelName))
             {
                 // 找不到指定前缀则直接返回Null
@@ -63,13 +84,15 @@ namespace KiraNet.GutsMvc.ModelBinder
             else
             {
                 var valueProviderResult = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
+                if (valueProviderResult != null)
+                    return BindSimpleModel(controllerContext, bindingContext, valueProviderResult);
 
-                return BindSimpleModel(controllerContext, bindingContext, valueProviderResult);
+                return null;
             }
         }
 
 
-        private static object BindComplexModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
+        private object BindComplexModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
             if (bindingContext.Model != null &&
                 bindingContext.ModelType.IsInstanceOfType(bindingContext.Model))
@@ -107,7 +130,7 @@ namespace KiraNet.GutsMvc.ModelBinder
             return model;
         }
 
-        private static void BindingProperty(ControllerContext controllerContext, ModelBindingContext bindingContext, PropertyDescriptor property)
+        private void BindingProperty(ControllerContext controllerContext, ModelBindingContext bindingContext, PropertyDescriptor property)
         {
             // 将属性名添加到现有前缀上
             string prefix = $"{bindingContext.ModelName ?? ""}.{property.Name ?? ""}".Trim('.');
@@ -122,7 +145,7 @@ namespace KiraNet.GutsMvc.ModelBinder
 
             // 针对属性实施Model绑定并对属性赋值
             // 注意BindModel方法的调用，复杂类型的递归调用就来自于这里
-            object propertyValue = ModelBinders.Binders.GetBinder(property.PropertyType).BindModel(controllerContext, context);
+            object propertyValue = Binders.GetBinder(property.PropertyType).BindModel(controllerContext, context);
 
             if (bindingContext.ModelMetadata.ConvertEmptyStringToNull &&
                 Object.Equals(propertyValue, String.Empty))
@@ -134,7 +157,7 @@ namespace KiraNet.GutsMvc.ModelBinder
             property.SetValue(bindingContext.Model, propertyValue);
         }
 
-        private static object BindCollection(ControllerContext controllerContext, ModelBindingContext bindingContext)
+        private object BindCollection(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
             Type modelType = bindingContext.ModelType;
             Type elementType;
@@ -180,11 +203,11 @@ namespace KiraNet.GutsMvc.ModelBinder
 
                 ModelBindingContext context = new ModelBindingContext(bindingContext.ValueProvider)
                 {
-                    ModelMetadata = ModelMetadataProvider.Current.GetMetadataForType(null, elementType),
+                    ModelMetadata = ModelMetadataProvider.GetMetadataForType(null, elementType),
                     ModelName = prefix,
                 };
 
-                object element = ModelBinders.Binders.GetBinder(elementType)
+                object element = Binders.GetBinder(elementType)
                     .BindModel(controllerContext, context);
 
                 elements.Add(element);
@@ -209,7 +232,7 @@ namespace KiraNet.GutsMvc.ModelBinder
             return model;
         }
 
-        private static object BindDictionary(ControllerContext controllerContext, ModelBindingContext bindingContext)
+        private object BindDictionary(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
             Type modelType = bindingContext.ModelType;
             Type[] argumentTypes = modelType.GetGenericArguments();
@@ -235,19 +258,19 @@ namespace KiraNet.GutsMvc.ModelBinder
 
                 ModelBindingContext contextForKey = new ModelBindingContext(bindingContext.ValueProvider)
                 {
-                    ModelMetadata = ModelMetadataProvider.Current.GetMetadataForType(null, keyType),
+                    ModelMetadata = ModelMetadataProvider.GetMetadataForType(null, keyType),
                     ModelName = prefix + ".key"
                 };
 
                 ModelBindingContext contextForValue = new ModelBindingContext(bindingContext.ValueProvider)
                 {
-                    ModelMetadata = ModelMetadataProvider.Current.GetMetadataForType(null, valueType),
+                    ModelMetadata = ModelMetadataProvider.GetMetadataForType(null, valueType),
                     ModelName = prefix + ".value"
                 };
 
-                object key = ModelBinders.Binders.GetBinder(keyType)
+                object key = Binders.GetBinder(keyType)
                     .BindModel(controllerContext, contextForKey);
-                object value = ModelBinders.Binders.GetBinder(valueType)
+                object value = Binders.GetBinder(valueType)
                     .BindModel(controllerContext, contextForValue);
                 list.Add(new KeyValuePair<object, object>(key, value));
             }
@@ -378,7 +401,6 @@ namespace KiraNet.GutsMvc.ModelBinder
                 .GetMethod("CopyCollection", BindingFlags.Static | BindingFlags.NonPublic)
                 .MakeGenericMethod(collectionType)
                 .Invoke(null, new object[] { collection, source });
-
         }
 
         private static void CopyCollection<T>(ICollection<T> collection, IEnumerable source)

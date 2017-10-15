@@ -8,6 +8,7 @@ namespace KiraNet.GutsMvc.View
 {
     internal class RazorPageCompiler : RazorCompiler
     {
+        object _sync = new object();
         protected override RazorPageGeneratorResult Generate(string rootNamespace, string targetPath, Type modelType)
         {
             var baseTypeName = "KiraNet.GutsMvc.View.RazorPageViewBase";
@@ -89,6 +90,7 @@ namespace KiraNet.GutsMvc.View
         private class FileSystemRazorProjectItemWrapper : RazorProjectItem
         {
             private readonly RazorProjectItem _source;
+            private readonly object _sync = new object();
 
             public FileSystemRazorProjectItemWrapper(RazorProjectItem item)
             {
@@ -105,8 +107,11 @@ namespace KiraNet.GutsMvc.View
 
             public override Stream Read()
             {
-                var processedContent = ProcessFileIncludes();
-                return new MemoryStream(Encoding.UTF8.GetBytes(processedContent));
+                lock (_sync)
+                {
+                    var processedContent = ProcessFileIncludes();
+                    return new MemoryStream(Encoding.UTF8.GetBytes(processedContent));
+                }
             }
 
             private string ProcessFileIncludes()

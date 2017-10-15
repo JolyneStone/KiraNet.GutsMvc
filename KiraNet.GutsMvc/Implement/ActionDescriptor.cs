@@ -1,21 +1,34 @@
-﻿using KiraNet.GutsMvc.Helper;
+﻿using KiraNet.GutsMvc.Filter;
+using KiraNet.GutsMvc.Helper;
 using KiraNet.GutsMvc.Metadata;
 using KiraNet.GutsMvc.ModelBinder;
+using KiraNet.GutsMvc.ModelValid;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace KiraNet.GutsMvc.Implement
 {
     /// <summary>
     /// 用于描述Action
     /// </summary>
-    public class ActionDescriptor
+    public class ActionDescriptor:IFilterAttributeProvider
     {
-        //private IList<ParameterDescriptor> _parameters;
         public string ActionName { get; set; }
         public MethodInfo Action { get; set; }
+        public IServiceProvider Services { get; set; }
+        public IEnumerable<FilterAttribute> GetFilterAttributes()
+        {
+            if(Action==null)
+            {
+                return null;
+            }
+
+            return Action.GetCustomAttributes<FilterAttribute>();
+        }
 
         internal virtual ParameterDescriptor[] GetParameters(ControllerContext context)
         {
@@ -53,13 +66,7 @@ namespace KiraNet.GutsMvc.Implement
 
             for (index = 0; index < paramDescriptors.Length; index++)
             {
-                // TODO: 没有正常得到Model元数据
-                var modelMetadata = DefaultModelMetadataProvider.Current.GetMetadataForType(null, paramDescriptors[index].ParameterType);
-                var bindingContext = new ModelBindingContext(controller.ValueProvider)
-                {
-                    ModelName = paramDescriptors[index].ParameterName,
-                    ModelMetadata = modelMetadata,
-                };
+                var paramDescriptor = paramDescriptors[index];
 
                 if (!String.IsNullOrWhiteSpace(controller.ControllerContext.RouteEntity.ParameterValue) &&
                     String.Equals(controller.ControllerContext.RouteEntity.DefaultParameter,
@@ -68,10 +75,10 @@ namespace KiraNet.GutsMvc.Implement
                 {
                     if (controller.ControllerContext.RouteEntity.ParameterValue != null)
                     {
-                        TypeConverter converter = TypeDescriptor.GetConverter(paramDescriptors[index].ParameterType);
+                        TypeConverter converter = TypeDescriptor.GetConverter(paramDescriptor.ParameterType);
                         try
                         {
-                            var value = converter.ConvertTo(controller.ControllerContext.RouteEntity.ParameterValue, paramDescriptors[index].ParameterType);
+                            var value = converter.ConvertTo(controller.ControllerContext.RouteEntity.ParameterValue, paramDescriptor.ParameterType);
                             paramDescriptors[index].ParameterValue = value;
                             continue;
                         }
@@ -82,27 +89,42 @@ namespace KiraNet.GutsMvc.Implement
                     }
                 }
 
-                if (DefaultParamterValue.TryGetDefaultValue(paramDescriptors[index].ParameterInfo, out var paramValue))
+                var modelBinder = ModelBinders.Binders.GetBinder(paramDescriptor.ParameterType);
+                var modelMetadata = Services.GetRequiredService<IModelMetadataProvider>().GetMetadataForType(null, paramDescriptor.ParameterType);
+                //var modelBinderModelBinders.Binders.GetBinder(paramDescriptor.ParameterType);
+
+                if (TryBindModel(modelBinder, modelMetadata, controller, "", out var paramValue))
+                {
+                    paramDescriptors[index].ParameterValue = paramValue;
+                    continue;
+                }
+
+                if (TryBindModel(modelBinder, modelMetadata, controller, paramDescriptor.ParameterName, out paramValue))
+                {
+                    paramDescriptors[index].ParameterValue = paramValue;
+                    continue;
+                }
+
+                // 尝试依赖注入
+                modelBinder = ModelBinders.Binders.GetBinder(typeof(IServiceProvider));
+
+                if (TryBindModel(modelBinder, modelMetadata, controller, "", out paramValue))
+                {
+
+                    paramDescriptors[index].ParameterValue = paramValue;
+                    continue;
+                }
+
+                if (DefaultParamterValue.TryGetDefaultValue(paramDescriptor.ParameterInfo, out paramValue))
                 {
                     // 注：默认值可能为Null
                     paramDescriptors[index].ParameterValue = paramValue;
                     continue;
                 }
-
-                paramValue = ModelBinders.Binders.GetBinder(paramDescriptors[index].ParameterType)
-                    .BindModel(controller.ControllerContext, bindingContext);
-                if (paramValue == null)
+                else
                 {
-                    paramValue = ModelBinders.Binders[typeof(IServiceProvider)].BindModel(controller.ControllerContext, bindingContext);
-                }
-
-                if (paramValue == null)
-                {
-                    // 默认值为空的情况已经被选出来了，因此如果值为空则说明元数据没有绑定成功，需要退出循环
                     break;
                 }
-
-                paramDescriptors[index].ParameterValue = paramValue;
             }
 
             if (index < paramDescriptors.Length)
@@ -110,8 +132,35 @@ namespace KiraNet.GutsMvc.Implement
                 return false;
             }
 
-            //由于paramDescriptors不负责正确的排序
+            controller.ModelState.ModelWrappers = paramDescriptors
+                .Select(param => new ModelWrapper
+                {
+                    ModelName = param.ParameterName,
+                    Model = param.ParameterValue,
+                    ModelType = param.ParameterType
+                });
 
+            return true;
+        }
+
+        private bool TryBindModel(IModelBinder modelBinder, ModelMetadata modelMetadata, Controller controller, string modelName, out object value)
+        {
+            var bindingContext = new ModelBindingContext(controller.ValueProvider)
+            {
+                ModelName = modelName,
+                ModelMetadata = modelMetadata,
+            };
+
+            object paramValue = modelBinder
+                .BindModel(controller.ControllerContext, bindingContext);
+
+            if (paramValue == null)
+            {
+                value = null;
+                return false;
+            }
+
+            value = paramValue;
             return true;
         }
     }

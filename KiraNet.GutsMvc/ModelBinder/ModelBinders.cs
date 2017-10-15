@@ -19,8 +19,6 @@ namespace KiraNet.GutsMvc.ModelBinder
         //public static IModelBinder GetBinderFromAttributes(Type type)
         //{
         //    var attributes = type.GetCustomAttributes(true).OfType<Attribute>();
-
-
         //}
     }
 }

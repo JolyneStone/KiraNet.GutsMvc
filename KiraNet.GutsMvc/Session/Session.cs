@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace KiraNet.GutsMvc
 {
-    public sealed class Session:IEnumerable<KeyValuePair<string, object>>
+    public sealed class Session : IEnumerable<KeyValuePair<string, object>>
     {
         /// <summary>
         /// 获取SessionId

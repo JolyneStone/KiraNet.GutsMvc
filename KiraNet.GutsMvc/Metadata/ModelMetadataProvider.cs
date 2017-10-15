@@ -8,21 +8,6 @@ using System.Reflection;
 
 namespace KiraNet.GutsMvc.Metadata
 {
-    //while(true)
-    //{
-    //    double x = out.NextDouble();
-    //    if(x<10||x>20)
-    //    {
-    //        continue;
-    //    }
-    //    else
-    //    {
-    //        ...........
-    //    }
-    //}
-
-
-
     /// <summary>
     /// 根据应用在数据类型或其数据成员上关联的特性来解析Model元数据
     /// </summary>
@@ -40,8 +25,7 @@ namespace KiraNet.GutsMvc.Metadata
             _prototypeCache = cache;
         }
 
-
-        public static ModelMetadataProvider Current { get; protected set; }
+        //public static ModelMetadataProvider Current { get; protected set; }
 
         protected string CacheKeyPrefix
         {

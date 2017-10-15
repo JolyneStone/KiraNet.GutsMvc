@@ -10,6 +10,7 @@ namespace KiraNet.GutsMvc
         public HttpNotFoundResult()
         {
             StatusCode = (int)HttpStatusCode.NotFound;
+            StatusDescription = "Not found";
         }
     }
 }

@@ -13,12 +13,12 @@ namespace KiraNet.GutsMvc.View
         {
             if (string.IsNullOrWhiteSpace(folderName))
             {
-                throw new ArgumentException("message", nameof(folderName));
+                throw new ArgumentException(nameof(folderName));
             }
 
             if (string.IsNullOrWhiteSpace(viewName))
             {
-                throw new ArgumentException("message", nameof(viewName));
+                throw new ArgumentException(nameof(viewName));
             }
 
             FolderName = folderName;

@@ -1,5 +1,7 @@
 ﻿using KiraNet.GutsMvc.Route;
 using System;
+using System.Security.Claims;
+using System.Security.Principal;
 
 namespace KiraNet.GutsMvc
 {
@@ -13,6 +15,7 @@ namespace KiraNet.GutsMvc
         public abstract HttpRequest Request { get; internal set; }
         public abstract HttpResponse Response { get; internal set; }
         public abstract RouteContext Route { get; internal set; }
+        public abstract IPrincipal User { get; set; }
         public virtual RouteEntity RouteEntity
         {
             get
@@ -63,9 +66,12 @@ namespace KiraNet.GutsMvc
 
         private ISessionManager _sessionManager;
         /// <summary>
-        /// 是否取消对该请求的处理
+        /// 指示是否取消对本次请求的处理
+        /// 中间件确定已经完成对本次请求的所有处理，希望禁止后续中间件响应请求时
+        /// 请将<see cref="HttpContext.IsCancel"/>设置为<code>true</code>
         /// </summary>
         public bool IsCancel { get; set; } = false;
+
 
         //public abstract CancellationToken RequestAborted { get; set; }
 

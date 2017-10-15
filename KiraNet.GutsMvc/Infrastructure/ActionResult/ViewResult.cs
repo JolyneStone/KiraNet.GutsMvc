@@ -8,9 +8,7 @@ namespace KiraNet.GutsMvc
     public class ViewResult : IActionResult
     {
         public object Model { get; set; }
-        //public TempDataDictionary TempData { get; set; }
-        //public ViewDataDictionary ViewData { get; set; }
-        //public dynamic ViewBag { get; set; }
+        public Type ModelType { get; set; }
         public IView View { get; set; }
         public string FolderName { get; set; }
         public string ViewName { get; set; }
@@ -29,6 +27,11 @@ namespace KiraNet.GutsMvc
             if (View == null)
             {
                 View = GetView(context);
+            }
+
+            if(ModelType!=null)
+            {
+                context.ModelType = ModelType;
             }
 
             ViewContext viewContext = new ViewContext(context, Model);

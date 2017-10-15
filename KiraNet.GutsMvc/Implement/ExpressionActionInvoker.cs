@@ -12,11 +12,11 @@ namespace KiraNet.GutsMvc.Implement
     /// <summary>
     /// 用表达式的方式去调用Action方法
     /// </summary>
-    public class ExpressionActionInvoker : IActionInvoker
+    public class ExpressionActionInvoker : ActionInvoker
     {
         // 用于缓存Invoke方法的MethodInfo
         private static MethodInfo _invokeMethod;
-        public void InvokeAction(ControllerContext controllerContext)
+        protected override void InvokeAction(ControllerContext controllerContext, object[] paramValues)
         {
             if (controllerContext == null)
             {
@@ -37,13 +37,14 @@ namespace KiraNet.GutsMvc.Implement
                 Expression.Constant(this),
                 _invokeMethod.MakeGenericMethod(returnType),
                 Expression.Constant(controllerContext),
+                Expression.Constant(paramValues, typeof(object[])),
                 Expression.Constant("0")
                 );
 
             Expression.Lambda<Action>(callExpr).Compile()();
         }
 
-        public void InvokeActionAsync(ControllerContext controllerContext)
+        protected override void InvokeActionAsync(ControllerContext controllerContext, object[] paramValues)
         {
             if (controllerContext == null)
             {
@@ -60,11 +61,11 @@ namespace KiraNet.GutsMvc.Implement
                     BindingFlags.NonPublic);
             }
 
-            
             Expression callExpr = Expression.Call(
                 Expression.Constant(this),
                 _invokeMethod.MakeGenericMethod(returnType),
                 Expression.Constant(controllerContext, typeof(ControllerContext)),
+                Expression.Constant(paramValues, typeof(object[])),
                 Expression.Constant("1", typeof(string))
                 );
 
@@ -77,42 +78,43 @@ namespace KiraNet.GutsMvc.Implement
         /// <typeparam name="T">表示IActionResult的类型</typeparam>
         /// <param name="controllerContext"></param>
         /// <param name="isActionAsync">"0"代表同步调用，否则代表异步调用</param>
-        private async void Invoke<T>(ControllerContext controllerContext, string isActionAsync)
+        private async void Invoke<T>(ControllerContext controllerContext, object[] paramValues, string isActionAsync)
             where T : IActionResult
         {
             IActionResult actionResult;
-            var parameterValues = GetParameterValues(controllerContext.ParameterDescriptors);
+            //var parameterValues = GetParameterValues(controllerContext.ParameterDescriptors);
+
             if (isActionAsync == "0")
             {
                 // 同步调用
                 var actionFunc = ConstructorFunc<T>(controllerContext);
-                actionResult = actionFunc(controllerContext.Controller, parameterValues);
+                actionResult = actionFunc(controllerContext.Controller, paramValues);
                 actionResult.ExecuteResult(controllerContext);
             }
             else
             {
                 // 异步调用
                 var actionFunc = ConstructorFunc<Task<T>>(controllerContext);
-                actionResult = await (actionFunc(controllerContext.Controller, parameterValues) as Task<T>);
+                actionResult = await (actionFunc(controllerContext.Controller, paramValues) as Task<T>);
                 await actionResult.ExecuteResultAsync(controllerContext);
             }
         }
 
-        private static object[] GetParameterValues(ParameterDescriptor[] parameterDescriptors)
-        {
-            if (parameterDescriptors == null || parameterDescriptors.Length == 0)
-            {
-                return null;
-            }
+        //private static object[] GetParameterValues(ParameterDescriptor[] parameterDescriptors)
+        //{
+        //    if (parameterDescriptors == null || parameterDescriptors.Length == 0)
+        //    {
+        //        return null;
+        //    }
 
-            object[] parameterValues = new object[parameterDescriptors.Length];
-            for (int i = 0; i < parameterValues.Length; i++)
-            {
-                parameterValues[i] = parameterDescriptors[i].ParameterValue;
-            }
+        //    object[] parameterValues = new object[parameterDescriptors.Length];
+        //    for (int i = 0; i < parameterValues.Length; i++)
+        //    {
+        //        parameterValues[i] = parameterDescriptors[i].ParameterValue;
+        //    }
 
-            return parameterValues;
-        }
+        //    return parameterValues;
+        //}
 
         private Func<Controller, object[], T> ConstructorFunc<T>(ControllerContext controllerContext)
         {

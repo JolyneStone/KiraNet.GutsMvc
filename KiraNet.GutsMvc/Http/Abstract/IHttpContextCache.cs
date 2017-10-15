@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace KiraNet.GutsMvc
+﻿namespace KiraNet.GutsMvc
 {
     /// <summary>
     /// 对HttpContext的缓存

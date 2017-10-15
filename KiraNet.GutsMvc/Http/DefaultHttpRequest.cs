@@ -28,6 +28,7 @@ namespace KiraNet.GutsMvc
         }
 
         public override HttpContext HttpContext => _context ?? throw new NullReferenceException(nameof(_context));
+
         public override RouteEntity RouteEntity { get; internal set; }
         //public override RouteData RouteData { get; internal set; }
 

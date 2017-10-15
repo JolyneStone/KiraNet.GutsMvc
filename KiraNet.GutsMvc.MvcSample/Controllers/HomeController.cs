@@ -1,12 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace KiraNet.GutsMvc.MvcSample.Controllers
 {
     public class User
     {
+        [Required]
         public string Id { get; set; }
         public string Name { get; set; }
+
+        [Required]
+        public Address Address { get; set; }
+    }
+
+    public class Address
+    {
+        public string City { get; set; }
+        public string Countryside { get; set; }
     }
     public class HomeController : Controller
     {
@@ -36,6 +46,25 @@ namespace KiraNet.GutsMvc.MvcSample.Controllers
         public IActionResult GetRazor(int Id)
         {
             return View(new User { Id = "001", Name = "MVC" });
+        }
+
+        [HttpPost]
+        [HttpGet]
+        [Authorize(Users = new string[]{ "ZZQ" },
+            Roles = new string[] { "User" })]
+        public IActionResult GetRazor(User user)
+        {
+            string msg;
+            if (ModelState.IsValid)
+            {
+                msg = "success";
+            }
+            else
+            {
+                msg = "failure";
+            }
+
+            return Json(new { status = msg });
         }
     }
 }

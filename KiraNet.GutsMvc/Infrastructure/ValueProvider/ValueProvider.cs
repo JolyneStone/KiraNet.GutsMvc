@@ -65,7 +65,7 @@ namespace KiraNet.GutsMvc.Infrastructure
         /// <returns></returns>
         public virtual IDictionary<string, string> GetKeysFromPrefix(string prefix)
         {
-            if (String.IsNullOrWhiteSpace(prefix))
+            if (prefix == null)
             {
                 throw new ArgumentNullException(nameof(prefix));
             }

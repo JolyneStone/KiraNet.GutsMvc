@@ -17,7 +17,6 @@ namespace KiraNet.GutsMvc.View
 
         public RoslynCompiler()
         {
-            // TODO: 这里注释掉了不知道是否会出错！
             RoslynCompiler.InitApplicationReferences(new AssemblyLocator());
         }
 

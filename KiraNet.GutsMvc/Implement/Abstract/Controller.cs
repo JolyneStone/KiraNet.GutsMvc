@@ -1,5 +1,7 @@
-﻿using KiraNet.GutsMvc.Implement;
+﻿using KiraNet.GutsMvc.Filter;
+using KiraNet.GutsMvc.Implement;
 using KiraNet.GutsMvc.Infrastructure;
+using KiraNet.GutsMvc.ModelValid;
 using KiraNet.GutsMvc.Route;
 using System;
 using System.IO;
@@ -12,7 +14,13 @@ namespace KiraNet.GutsMvc
     /// <summary>
     /// Controller的抽象类
     /// </summary>
-    public abstract class Controller : IDisposable
+    public abstract class Controller :
+        IDisposable,
+        IAuthenticationFilter,
+        IAuthorizationFilter,
+        IExceptionFilter,
+        IActionFilter,
+        IResultFilter
     {
         private IValueProvider _valueProvider;
         private ControllerContext _controllerContext;
@@ -28,6 +36,8 @@ namespace KiraNet.GutsMvc
         public HttpResponse HttpResponse => HttpContext?.Response;
 
         public RouteEntity RouteEntity { get; internal set; }
+
+        public IModelState ModelState => ControllerContext.ModelState;
 
         public IActionInvoker ActionInvoker
         {
@@ -51,10 +61,12 @@ namespace KiraNet.GutsMvc
             get
             {
                 if (_controllerContext == null)
+                {
                     _controllerContext = new ControllerContext()
                     {
                         Controller = this
                     };
+                }
 
                 return _controllerContext;
             }
@@ -70,7 +82,7 @@ namespace KiraNet.GutsMvc
             {
                 if (_viewDataDictionary == null)
                 {
-                    _viewDataDictionary = new ViewDataDictionary();
+                    _viewDataDictionary = new ViewDataDictionary(HttpContext.Service);
                 }
 
                 return _viewDataDictionary;
@@ -83,7 +95,7 @@ namespace KiraNet.GutsMvc
             {
                 if (_tempDataDictionary == null)
                 {
-                    _tempDataDictionary = new TempDataDictionary();
+                    _tempDataDictionary = new TempDataDictionary(ViewData);
                 }
 
                 return _tempDataDictionary;
@@ -222,6 +234,11 @@ namespace KiraNet.GutsMvc
             return new HttpNotFoundResult() { StatusDescription = statusDescription };
         }
 
+        protected virtual HttpUnauthorizedResult HttpUnauthorizedResult(string statusDescription = null)
+        {
+            return new HttpUnauthorizedResult() { StatusDescription = statusDescription };
+        }
+
         protected virtual HttpStatusCodeResult HttpStatusCode(HttpStatusCode statusCode, string statusDescription = null)
         {
             return HttpStatusCode((int)statusCode, statusDescription);
@@ -247,15 +264,98 @@ namespace KiraNet.GutsMvc
 
         protected virtual ViewResult View(object model = null, string folderName = null, string viewName = null)
         {
+            ViewData.Model = model;
             viewName = String.IsNullOrWhiteSpace(viewName) ? ControllerContext.ActionDescriptor.ActionName : viewName;
             folderName = String.IsNullOrWhiteSpace(folderName) ? ControllerContext.ControllerDescriptor.ControllerName : folderName;
 
             return new ViewResult
             {
-                FolderName=folderName,
+                FolderName = folderName,
                 ViewName = viewName,
                 Model = model
             };
+        }
+
+        protected virtual ViewResult View(Type modelType, object model = null, string folderName = null, string viewName = null)
+        {
+            ViewData.Model = model;
+            viewName = String.IsNullOrWhiteSpace(viewName) ? ControllerContext.ActionDescriptor.ActionName : viewName;
+            folderName = String.IsNullOrWhiteSpace(folderName) ? ControllerContext.ControllerDescriptor.ControllerName : folderName;
+
+            return new ViewResult
+            {
+                FolderName = folderName,
+                ViewName = viewName,
+                Model = model,
+                ModelType = modelType
+            };
+        }
+
+
+        // 有关过滤器的实现在具体的Controller中完成
+        // Controller中的过滤器总是最先执行
+
+        protected virtual void OnAuthentication(AuthenticationContext filterContext)
+        {
+        }
+
+        protected virtual void OnAuthorization(AuthorizationContext filterContext)
+        {
+        }
+
+        protected virtual void OnException(ExceptionContext filterContext)
+        {
+        }
+
+        //protected virtual void OnResultExecuting(ResultExecutingContext filterContext)
+        //{
+        //}
+
+        protected virtual void OnResultExecuted(ResultExecutedContext filterContext)
+        {
+        }
+
+        protected virtual void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+        }
+
+        protected virtual void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+        }
+
+        void IAuthenticationFilter.OnAuthentication(AuthenticationContext filterContext)
+        {
+            OnAuthentication(filterContext);
+        }
+
+        void IAuthorizationFilter.OnAuthorization(AuthorizationContext filterContext)
+        {
+            OnAuthorization(filterContext);
+        }
+
+        void IExceptionFilter.OnException(ExceptionContext filterContext)
+        {
+            OnException(filterContext);
+        }
+
+        void IActionFilter.OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            OnActionExecuting(filterContext);
+        }
+
+        void IActionFilter.OnActionExecuted(ActionExecutedContext filterContext)
+        {
+            OnActionExecuted(filterContext);
+        }
+
+        //void IResultFilter.OnResultExecuting(ResultExecutingContext filterContext)
+        //{
+        //    OnResultExecuting(filterContext);
+        //}
+
+        void IResultFilter.OnResultExecuted(ResultExecutedContext filterContext)
+        {
+            OnResultExecuted(filterContext);
         }
 
         // TODO:先暂时省略一些必要的属性与方法

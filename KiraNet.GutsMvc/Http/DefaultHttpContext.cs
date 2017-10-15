@@ -1,5 +1,9 @@
-﻿using KiraNet.GutsMvc.Route;
+﻿using KiraNet.GutsMvc.Filter;
+using KiraNet.GutsMvc.Route;
+using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Security.Claims;
+using System.Security.Principal;
 
 namespace KiraNet.GutsMvc
 {
@@ -10,13 +14,10 @@ namespace KiraNet.GutsMvc
     /// </summary>
     public class DefaultHttpContext : HttpContext
     {
-        //private readonly static Func<IFeatureCollection, IHttpRequestLifetimeFeature> _newHttpRequestLifetimeFeature = f => new HttpRequestLifetimeFeature();
         /// <summary>
         /// 该属性是由服务器创建的用于封装原始HTTP上下文相关特性的对象
         /// </summary>
         public override IFeatureCollection HttpContextFeatures { get; }
-
-        //private FeatureReferences<FeatureInterfaces> _features;
         public override HttpRequest Request { get; internal set; }
         public override HttpResponse Response { get; internal set; }
         public override RouteContext Route { get; internal set; }
@@ -36,6 +37,24 @@ namespace KiraNet.GutsMvc
             Route = new RouteContext(this);
             //RouteData = Request.RouteData;
             RouteEntity = Route.Route.GetRouteEntity(RouteConfiguration.RouteConfig, Request.RawUrl.ToString());
+        }
+
+        private IPrincipal _user;
+        public override IPrincipal User
+        {
+            get
+            {
+                if (_user == null)
+                {
+                    _user = Service.GetService<IClaimSchema>().CreateSchema(this);
+                }
+
+                return _user;
+            }
+            set
+            {
+                _user = value;
+            }
         }
 
         //private IHttpRequestLifetimeFeature LifetimeFeature 

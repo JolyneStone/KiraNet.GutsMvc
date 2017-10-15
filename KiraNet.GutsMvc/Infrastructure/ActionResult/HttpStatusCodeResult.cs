@@ -1,6 +1,5 @@
 ﻿using KiraNet.GutsMvc.Implement;
 using System;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace KiraNet.GutsMvc

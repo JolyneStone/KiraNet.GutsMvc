@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KiraNet.GutsMvc.Filter;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -9,18 +10,27 @@ namespace KiraNet.GutsMvc.Implement
     /// <summary>
     /// 用于描述Controller
     /// </summary>
-    public class ControllerDescriptor
+    public class ControllerDescriptor : IFilterAttributeProvider
     {
         /// <summary>
         /// 除去"Controller"后缀
         /// </summary>
         public string ControllerName { get; set; }
         public TypeInfo ControllerType { get; set; }
+        public IServiceProvider Services { get; set; }
+
+        public IEnumerable<FilterAttribute> GetFilterAttributes()
+        {
+            if (ControllerType == null)
+            {
+                return null;
+            }
+
+            return ControllerType.GetCustomAttributes<FilterAttribute>();
+        }
 
         internal ActionDescriptor BindingAction(Controller controller)
         {
-            //var controllerContext = controller.ControllerContext;
-
             if (controller.ControllerContext.ControllerDescriptor != null)
             {
                 new InvalidOperationException($"在{nameof(ControllerDescriptor)}属性被赋值前被使用");
@@ -28,19 +38,6 @@ namespace KiraNet.GutsMvc.Implement
 
             foreach (var actionDescriptor in controller.ControllerContext.ControllerDescriptor.FindActions(controller.ControllerContext))
             {
-                //var paramDescriptors = actionDescriptor.GetParameters(controller.ControllerContext);
-                //if (paramDescriptors == null)
-                //{
-                //    continue;
-                //}
-
-                //if (paramDescriptors.Length == 0)
-                //{
-                //    controller.ControllerContext.ActionDescriptor = actionDescriptor;
-                //    controller.ControllerContext.ParameterDescriptor = null;
-                //    return actionDescriptor;
-                //}
-
                 if (!actionDescriptor.TryBindingParameter(controller, out var paramDescriptors))
                 {
                     controller.ControllerContext.ParameterDescriptors = null;
@@ -67,7 +64,8 @@ namespace KiraNet.GutsMvc.Implement
                     BindingFlags.Instance |
                     BindingFlags.IgnoreCase |
                     BindingFlags.InvokeMethod)
-                    .OrderBy(x => x.GetParameters().Length);
+                    .OrderBy(x => x.GetParameters().Length)
+                    .OrderByDescending(x => x.IsDefined(typeof(HttpMethodAttribute)));
             if (actionMethods == null && !actionMethods.Any())
             {
                 yield break;
@@ -86,13 +84,13 @@ namespace KiraNet.GutsMvc.Implement
                 // 2. IActionResult或其实现类型
                 // 3. Task<T>，其中T为IActionResult或其实现类型
                 var result = method.ReturnType;
-                if(result == typeof(void))
+                if (result == typeof(void))
                 {
                     continue;
                 }
                 if (!typeof(IActionResult).IsAssignableFrom(result))
                 {
-                    if(!result.IsGenericType)
+                    if (!result.IsGenericType)
                     {
                         continue;
                     }
@@ -139,7 +137,7 @@ namespace KiraNet.GutsMvc.Implement
                 {
                     if (routeMethod == HttpMethod.GET)
                     {
-                        yield return new ActionDescriptor { Action = method, ActionName = method.Name.ToLower() };
+                        yield return new ActionDescriptor { Action = method, ActionName = method.Name.ToLower(), Services = Services };
                     }
                     else
                     {
@@ -149,7 +147,7 @@ namespace KiraNet.GutsMvc.Implement
 
                 if (methods.FirstOrDefault(x => x.HttpMethod == routeMethod) != null)
                 {
-                    yield return new ActionDescriptor { Action = method, ActionName = method.Name.ToLower() };
+                    yield return new ActionDescriptor { Action = method, ActionName = method.Name.ToLower(), Services = Services };
                 }
 
                 continue;

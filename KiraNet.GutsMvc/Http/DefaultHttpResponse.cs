@@ -10,7 +10,7 @@ namespace KiraNet.GutsMvc
         private HttpContext _context;
         public IHttpResponseFeature ResponseFeature { get; }
 
-        public DefaultHttpResponse(DefaultHttpContext context)
+        public DefaultHttpResponse(HttpContext context)
         {
             this.ResponseFeature = context.HttpContextFeatures.Get<IHttpResponseFeature>();
             _context = context;

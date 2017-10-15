@@ -1,5 +1,4 @@
 ﻿using KiraNet.GutsMvc.Implement;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace KiraNet.GutsMvc.ModelBinder
 {

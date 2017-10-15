@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace KiraNet.GutsMvc
 {
@@ -29,6 +30,7 @@ namespace KiraNet.GutsMvc
                     HttpContext.Request.RequestStream.Close();
                     HttpContext.Response.ResponseStream.Close();
                     Scope?.Dispose();
+                    Thread.CurrentPrincipal = null;
                 }
 
                 disposedValue = true;

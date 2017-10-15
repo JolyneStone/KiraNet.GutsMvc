@@ -8,7 +8,6 @@ namespace KiraNet.GutsMvc.Metadata
     {
         public DefaultModelMetadataProvider(IMemoryCache cache) : base(cache)
         {
-            Current = this;
         }
 
 

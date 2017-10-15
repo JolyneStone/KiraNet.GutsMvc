@@ -32,11 +32,13 @@ namespace KiraNet.GutsMvc.Infrastructure
                 return _sortedValues.Length > 0; // 空字符串表示任意的前缀
 
             PrefixComparer prefixComparer = new PrefixComparer(prefix);
+
+            // 搜索'xxx'前缀
             bool contaionsPrefix = Array.BinarySearch(_sortedValues, prefix, prefixComparer) > -1;
 
-            // 以下代码有点疑问，暂时先注释了先。。。
             if (!contaionsPrefix)
             {
+                // 搜索'xxx['前缀
                 contaionsPrefix = Array.BinarySearch(_sortedValues, prefix + "[", prefixComparer) > -1;
             }
 

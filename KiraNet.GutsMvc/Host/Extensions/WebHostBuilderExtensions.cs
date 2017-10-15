@@ -9,9 +9,15 @@ namespace KiraNet.GutsMvc
 {
     public static class WebHostBuilderExtensions
     {
-        public static IWebHostBuilder Configure(this IWebHostBuilder builder, Action<IServiceCollection, IApplicationBuilder> configure)
+        public static IWebHostBuilder Configure(
+            this IWebHostBuilder builder,
+            Action<IServiceCollection> configureServices,
+            Action<IApplicationBuilder> configureApplication)
             => builder.ConfigureServices(services =>
-            services.AddSingleton<IApplicationStartup>(_ => new ApplicationStartup(services, configure)));
+            {
+                configureServices(services);
+                services.AddSingleton<IApplicationStartup>(_ => new ApplicationStartup(services, configureApplication));
+            });
 
         public static IWebHostBuilder UseHttpListener(this IWebHostBuilder builder)
         {
@@ -63,11 +69,9 @@ namespace KiraNet.GutsMvc
             if (startup == null)
                 throw new InvalidOperationException("操作失败，无法构造出Startup类");
 
-            return builder.Configure((services, app) =>
-            {
-                startup.ConfigureServices(services);
-                startup.Configure(app);
-            });
+            return builder.Configure(
+                services => startup.ConfigureServices(services),
+                app=>startup.Configure(app));
         }
     }
 }

@@ -1,21 +1,28 @@
 ﻿using KiraNet.GutsMvc.Metadata;
+using KiraNet.GutsMvc.ModelValid;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace KiraNet.GutsMvc
 {
     public class ViewDataDictionary : IDictionary<string, object>
     {
         private readonly Dictionary<string, object> _dictionary = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-
+        protected IServiceProvider _services;
         protected ModelMetadata _modelMetadata;
         protected object _model;
 
-        public ViewDataDictionary() { }
 
-        public ViewDataDictionary(object model)
+        public ViewDataDictionary(IServiceProvider service)
         {
+            _services = service;
+        }
+
+        public ViewDataDictionary(IServiceProvider services,object model)
+        {
+            _services = services;
             _model = model;
         }
 
@@ -38,7 +45,9 @@ namespace KiraNet.GutsMvc
                 _modelMetadata = null;
                 _model = value;
             }
-        }
+        } 
+
+        public ModelValidDictionary ModelValid { get; set; }
 
         public ModelMetadata ModelMetadata
         {
@@ -47,10 +56,15 @@ namespace KiraNet.GutsMvc
                 // 之所以要有元数据，目的是为了不管在Controller还是在View都可以得到Model的元数据
                 if (_modelMetadata == null && _model != null)
                 {
-                    _modelMetadata = ModelMetadataProvider.Current.GetMetadataForType(() => _model, _model.GetType());
+                    _modelMetadata = _services.GetRequiredService<IModelMetadataProvider>()
+                        .GetMetadataForType(() => _model, _model.GetType());
                 }
 
                 return _modelMetadata;
+            }
+            set
+            {
+                _modelMetadata = value;
             }
         }
 

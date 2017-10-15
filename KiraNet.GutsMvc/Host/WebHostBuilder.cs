@@ -15,9 +15,9 @@ namespace KiraNet.GutsMvc
         public WebHostBuilder()
         {
             /// 注册IApplicationBuilder
-            _services = new ServiceCollection()
-                .AddMemoryCache()
-                .ConfigureDefaultInject();
+            _services = new ServiceCollection();
+                //.AddMemoryCache()
+                //.ConfigureDefaultInject();
 
             _config = new ConfigurationBuilder()
                 .AddInMemoryCollection()

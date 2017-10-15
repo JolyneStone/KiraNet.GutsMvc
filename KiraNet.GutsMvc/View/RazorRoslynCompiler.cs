@@ -9,6 +9,7 @@ namespace KiraNet.GutsMvc.View
     /// </summary>
     internal class RazorRoslynCompiler : RoslynCompiler
     {
+        private readonly object _sync = new object();
         //private static Assembly _rootAssembly = typeof(RoslynCompiler).GetTypeInfo().Assembly;
 
         //public EmitResult CompileResult { get; private set; }
@@ -102,11 +103,14 @@ namespace KiraNet.GutsMvc.View
 
             options.AddImports(defaultNamespaces);
 
-            var result = CSharpScript.Create(code, options)
-                .ContinueWith($"new {className}()");
-            var value = result.RunAsync().ConfigureAwait(false).GetAwaiter().GetResult().ReturnValue;
-            var view = value as RazorPageViewBase;
-            return view;
+            lock (_sync)
+            {
+                var result = CSharpScript.Create(code, options)
+                    .ContinueWith($"new {className}()");
+                var value = result.RunAsync().ConfigureAwait(false).GetAwaiter().GetResult().ReturnValue;
+                var view = value as RazorPageViewBase;
+                return view;
+            }
         }
 
         //private Type LoadTypeForAssemblyStream(MemoryStream assemblyStream)

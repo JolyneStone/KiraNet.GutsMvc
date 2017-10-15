@@ -12,6 +12,7 @@ namespace KiraNet.GutsMvc
     public abstract class HttpRequest
     {
         public abstract HttpContext HttpContext { get; }
+
         /// <summary>
         /// 当前请求地址
         /// </summary>

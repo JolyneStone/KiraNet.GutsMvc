@@ -10,9 +10,25 @@ namespace KiraNet.GutsMvc.Helper
             return (!type.IsValueType || Nullable.GetUnderlyingType(type) != null);
         }
 
+        /// <summary>
+        /// 判断指定的类型是否是可空类型
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static bool IsNullableValueType(Type type)
         {
             return Nullable.GetUnderlyingType(type) != null;
+        }
+
+        /// <summary>
+        /// 判断指定的类型是否是基元类型
+        /// 注：string不是基元类型
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool IsPrimitiveType(Type type)
+        {
+            return type.IsPrimitive;
         }
 
         /// <summary>

@@ -1,16 +1,18 @@
-﻿namespace KiraNet.GutsMvc
+﻿using System;
+
+namespace KiraNet.GutsMvc
 {
     public class TempDataDictionary : ViewDataDictionary
     {
-        public TempDataDictionary() : base()
+        public TempDataDictionary(IServiceProvider services) : base(services)
         {
         }
 
-        public TempDataDictionary(object model) : base(model)
+        public TempDataDictionary(IServiceProvider services, object model) : base(services, model)
         {
         }
 
-        public TempDataDictionary(TempDataDictionary tempDataDictionary) : base(tempDataDictionary)
+        public TempDataDictionary(ViewDataDictionary tempDataDictionary) : base(tempDataDictionary)
         {
         }
 

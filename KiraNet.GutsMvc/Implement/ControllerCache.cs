@@ -12,7 +12,7 @@ namespace KiraNet.GutsMvc.Implement
 
         public bool TryGetController(string key, out TypeInfo typeInfo)
         {
-            if(String.IsNullOrWhiteSpace(key))
+            if (String.IsNullOrWhiteSpace(key))
             {
                 typeInfo = null;
                 return false;
@@ -44,23 +44,16 @@ namespace KiraNet.GutsMvc.Implement
                 return false;
             }
 
-            if(typeInfo == null)
+            if (typeInfo == null)
             {
                 return false;
             }
 
 
             key = key.ToLower();
-            if(_cache.ContainsKey(key))
-            {
-                _spinLock.Enter();
-                _cache[key] = typeInfo;
-                _spinLock.Exit();
-                return true;
-            }
 
             _spinLock.Enter();
-            _cache.Add(key, typeInfo);
+            _cache[key] = typeInfo;
             _spinLock.Exit();
             return true;
         }
