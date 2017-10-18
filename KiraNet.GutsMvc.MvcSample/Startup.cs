@@ -1,4 +1,5 @@
 ﻿using KiraNet.GutsMvc.Filter;
+using KiraNet.GutsMvc.MvcSample.Controllers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace KiraNet.GutsMvc.MvcSample

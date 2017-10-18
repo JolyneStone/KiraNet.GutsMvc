@@ -144,7 +144,6 @@ namespace KiraNet.GutsMvc.Metadata
 
         /// <summary>
         /// 表示默认模板名称
-        /// 何谓模板？其实就是各种HtmlHelper的模板方法或者是TagHelper方法又或者是某些特性中所指定的模板
         /// </summary>
         public virtual string TemplateHint { get; set; }
 

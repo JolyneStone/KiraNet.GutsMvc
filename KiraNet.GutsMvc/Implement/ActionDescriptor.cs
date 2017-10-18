@@ -15,14 +15,14 @@ namespace KiraNet.GutsMvc.Implement
     /// <summary>
     /// 用于描述Action
     /// </summary>
-    public class ActionDescriptor:IFilterAttributeProvider
+    public class ActionDescriptor : IFilterAttributeProvider
     {
         public string ActionName { get; set; }
         public MethodInfo Action { get; set; }
         public IServiceProvider Services { get; set; }
         public IEnumerable<FilterAttribute> GetFilterAttributes()
         {
-            if(Action==null)
+            if (Action == null)
             {
                 return null;
             }

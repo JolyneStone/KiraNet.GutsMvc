@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace KiraNet.GutsMvc.MvcSample.Controllers
@@ -18,6 +19,7 @@ namespace KiraNet.GutsMvc.MvcSample.Controllers
         public string City { get; set; }
         public string Countryside { get; set; }
     }
+
     public class HomeController : Controller
     {
         public IActionResult Index(int id)
@@ -42,15 +44,15 @@ namespace KiraNet.GutsMvc.MvcSample.Controllers
             return Json(user);
         }
 
-        [ModelType(typeof(User))]
+        [ModelType(typeof(List<User>))]
         public IActionResult GetRazor(int Id)
         {
-            return View(new User { Id = "001", Name = "MVC" });
+            return View(new List<User>() { new User(), new User { Id = "001", Name = "MVC" } });
         }
 
         [HttpPost]
         [HttpGet]
-        [Authorize(Users = new string[]{ "ZZQ" },
+        [Authorize(Users = new string[] { "ZZQ" },
             Roles = new string[] { "User" })]
         public IActionResult GetRazor(User user)
         {

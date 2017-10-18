@@ -96,7 +96,7 @@ namespace KiraNet.GutsMvc.View
             var defaultNamespaces = new string[] { "System", "System.Threading.Tasks", "KiraNet.GutsMvc.View" };
 
 
-            if(namespaces!=null&&namespaces.Length>0)
+            if (namespaces != null && namespaces.Length > 0)
             {
                 defaultNamespaces = defaultNamespaces.Except(namespaces).ToArray();
             }

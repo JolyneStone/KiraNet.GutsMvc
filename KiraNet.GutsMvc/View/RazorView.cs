@@ -1,6 +1,5 @@
-﻿using System;
-using KiraNet.GutsMvc.Helper;
-using System.Threading.Tasks;
+﻿using KiraNet.GutsMvc.Helper;
+using System;
 
 namespace KiraNet.GutsMvc.View
 {

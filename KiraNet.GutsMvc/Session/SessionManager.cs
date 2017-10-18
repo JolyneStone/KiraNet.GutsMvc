@@ -6,7 +6,7 @@ namespace KiraNet.GutsMvc
 {
     public class SessionManager : ISessionManager
     {
-        private const string COOKIE_SESSION_ID = "micromvc_session";
+        private const string COOKIE_SESSION_ID = "gutsmvc_session";
         /// <summary>
         /// Session创建时引发
         /// </summary>
@@ -61,6 +61,11 @@ namespace KiraNet.GutsMvc
         }
         public bool TryCreateSession(string sessionId, out Session session)
         {
+            if (String.IsNullOrWhiteSpace(sessionId))
+            {
+                sessionId = Guid.NewGuid().ToString();
+            }
+
             SessionCreating?.Invoke(this, new SessionArgs(null));
             Cookie cookie;
             if((cookie=_context.Request.Cookies[COOKIE_SESSION_ID])!=null)
@@ -71,7 +76,9 @@ namespace KiraNet.GutsMvc
                     return true;
                 }
             }
-            session = new Session(sessionId, ExpireTime);
+
+            session = new Session(sessionId, ExpireTime); 
+
             _context.Response.Cookies.Add(new Cookie(COOKIE_SESSION_ID, session.Id) { Expires = session.ExpireTime });
 
             if (_sessionDictionary.TryAdd(session.Id, session))

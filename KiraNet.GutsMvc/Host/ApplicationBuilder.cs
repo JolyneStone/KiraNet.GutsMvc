@@ -1,5 +1,4 @@
-﻿using KiraNet.GutsMvc.Handler;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +15,7 @@ namespace KiraNet.GutsMvc
         public ApplicationBuilder()
         {
             // 将StaticFileHandler作为第一个中间件
-            this.Use(new StaticFileHandler());
+            this.Use(new StaticFileMiddlewareHandler());
         }
 
         public Func<HttpContext, Task> Build()

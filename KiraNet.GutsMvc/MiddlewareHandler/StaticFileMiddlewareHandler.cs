@@ -1,11 +1,10 @@
 ﻿using KiraNet.GutsMvc.StaticFiles;
 using System.IO;
 using System.Net;
-using System.Text;
 
-namespace KiraNet.GutsMvc.Handler
+namespace KiraNet.GutsMvc
 {
-    internal sealed class StaticFileHandler : IMiddlewareHandle
+    internal sealed class StaticFileMiddlewareHandler : IMiddlewareHandle
     {
         public void MiddlewareExecute(HttpContext httpContext)
         {

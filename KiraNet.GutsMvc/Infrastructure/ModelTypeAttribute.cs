@@ -5,14 +5,14 @@ namespace KiraNet.GutsMvc
     [AttributeUsage(
         AttributeTargets.Method,
         AllowMultiple = false,
-        Inherited =true)]
-    public class ModelTypeAttribute:Attribute
+        Inherited = true)]
+    public class ModelTypeAttribute : Attribute
     {
         public Type ModelType { get; set; }
 
         public ModelTypeAttribute(Type modelType)
         {
-            if(modelType!=null)
+            if (modelType != null)
             {
                 ModelType = modelType;
             }

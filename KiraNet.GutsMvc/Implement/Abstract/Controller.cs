@@ -1,4 +1,5 @@
 ﻿using KiraNet.GutsMvc.Filter;
+using KiraNet.GutsMvc.Helper;
 using KiraNet.GutsMvc.Implement;
 using KiraNet.GutsMvc.Infrastructure;
 using KiraNet.GutsMvc.ModelValid;
@@ -147,7 +148,12 @@ namespace KiraNet.GutsMvc
             ControllerContext.ActionDescriptor = ControllerContext.ControllerDescriptor.BindingAction(this);
             if (ControllerContext.ActionDescriptor == null)
             {
-                throw new MissingMethodException($"无法找到指定的Action");
+                //ControllerContext.ActionDescriptor = new ActionDescriptor()
+                //{
+                //    Action = NotFoundErrorView.GetDisplay(),
+                //    ActionName = NotFoundErrorView.NotFoundViewName
+                //};
+                throw new NotFoundUrlException();
             }
 
             var returnType = ControllerContext.ActionDescriptor.Action.ReturnType;
@@ -178,6 +184,14 @@ namespace KiraNet.GutsMvc
         protected virtual EmptyResult Empty()
         {
             return new EmptyResult();
+        }
+
+        protected virtual RedirectResult Redirect(string url)
+        {
+            return new RedirectResult()
+            {
+                Url = url
+            };
         }
 
         protected virtual ContentResult Content(string content, string contentType = null, Encoding encoding = null)
@@ -278,7 +292,10 @@ namespace KiraNet.GutsMvc
 
         protected virtual ViewResult View(Type modelType, object model = null, string folderName = null, string viewName = null)
         {
+            ControllerContext.ModelType = modelType ?? ControllerContext.ModelType;
+            ViewData.ModelType = modelType ?? ControllerContext.ModelType;
             ViewData.Model = model;
+
             viewName = String.IsNullOrWhiteSpace(viewName) ? ControllerContext.ActionDescriptor.ActionName : viewName;
             folderName = String.IsNullOrWhiteSpace(folderName) ? ControllerContext.ControllerDescriptor.ControllerName : folderName;
 

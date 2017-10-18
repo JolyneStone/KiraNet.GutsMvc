@@ -12,6 +12,10 @@ namespace KiraNet.GutsMvc
         {
         }
 
+        public TempDataDictionary(IServiceProvider services, Type modelType) : base(services, modelType)
+        {
+        }
+
         public TempDataDictionary(ViewDataDictionary tempDataDictionary) : base(tempDataDictionary)
         {
         }
@@ -31,7 +35,7 @@ namespace KiraNet.GutsMvc
         public override bool TryGetValue(string key, out object value)
         {
             var result = base.TryGetValue(key, out value);
-            if(result)
+            if (result)
             {
                 this.Remove(key);
             }

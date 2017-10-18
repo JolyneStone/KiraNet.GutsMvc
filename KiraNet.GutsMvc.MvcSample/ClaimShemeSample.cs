@@ -12,20 +12,18 @@ namespace KiraNet.GutsMvc.MvcSample
         {
             if (Thread.CurrentPrincipal == null)
             {
-                var clamis = new List<Claim>
+                var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, "zzq"),
+                    new Claim(ClaimTypes.Name, "ZZQ"),
                     new Claim(ClaimTypes.Role, "User")
                 };
-                var identity = new ClaimsIdentity(clamis, "GutsMvcLogin");
+                var identity = new ClaimsIdentity(claims, "GutsMvcLogin");
 
                 ClaimsPrincipal principal = new ClaimsPrincipal(identity);
-                //把用户权限添加到User
-                httpContext.User = principal;
                 Thread.CurrentPrincipal = principal;
             }
 
-            return httpContext.User;
+            return Thread.CurrentPrincipal;
         }
     }
 }

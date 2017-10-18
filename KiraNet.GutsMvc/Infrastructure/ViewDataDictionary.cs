@@ -13,6 +13,7 @@ namespace KiraNet.GutsMvc
         protected IServiceProvider _services;
         protected ModelMetadata _modelMetadata;
         protected object _model;
+        protected Type _modelType;
 
 
         public ViewDataDictionary(IServiceProvider service)
@@ -20,10 +21,16 @@ namespace KiraNet.GutsMvc
             _services = service;
         }
 
-        public ViewDataDictionary(IServiceProvider services,object model)
+        public ViewDataDictionary(IServiceProvider services, object model)
         {
             _services = services;
             _model = model;
+        }
+
+        public ViewDataDictionary(IServiceProvider services, Type modelType)
+        {
+            _services = services;
+            _modelType = modelType;
         }
 
         public ViewDataDictionary(ViewDataDictionary viewData)
@@ -39,13 +46,31 @@ namespace KiraNet.GutsMvc
 
         public object Model
         {
-            get { return _model; }
+            get => _model;
             set
             {
                 _modelMetadata = null;
                 _model = value;
             }
-        } 
+        }
+
+        public Type ModelType
+        {
+            get
+            {
+                if (_modelType == null && _model != null)
+                {
+                    _modelType = _model.GetType();
+                }
+
+                return _modelType;
+            }
+            set
+            {
+                _modelMetadata = null;
+                _modelType = value;
+            }
+        }
 
         public ModelValidDictionary ModelValid { get; set; }
 
@@ -54,10 +79,19 @@ namespace KiraNet.GutsMvc
             get
             {
                 // 之所以要有元数据，目的是为了不管在Controller还是在View都可以得到Model的元数据
-                if (_modelMetadata == null && _model != null)
+                if (_modelMetadata == null)
                 {
-                    _modelMetadata = _services.GetRequiredService<IModelMetadataProvider>()
-                        .GetMetadataForType(() => _model, _model.GetType());
+                    if (_model != null)
+                    {
+                        _modelMetadata = _services.GetRequiredService<IModelMetadataProvider>()
+                            .GetMetadataForType(() => _model, _model.GetType());
+                    }
+
+                    if (_modelType != null)
+                    {
+                        _modelMetadata = _services.GetRequiredService<IModelMetadataProvider>()
+                            .GetMetadataForType(null, _modelType);
+                    }
                 }
 
                 return _modelMetadata;

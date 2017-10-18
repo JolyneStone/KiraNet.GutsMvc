@@ -6,7 +6,7 @@ namespace KiraNet.GutsMvc.Filter
 {
     public class ClaimSchema : IClaimSchema
     {
-        public IPrincipal CreateSchema(HttpContext httpContext)
+        public virtual IPrincipal CreateSchema(HttpContext httpContext)
         {
             if(Thread.CurrentPrincipal == null)
             {

@@ -4,6 +4,8 @@ using KiraNet.GutsMvc.ModelBinder;
 using KiraNet.GutsMvc.ModelValid;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
+using System.Reflection;
 using System.Threading;
 
 namespace KiraNet.GutsMvc
@@ -16,7 +18,7 @@ namespace KiraNet.GutsMvc
                 .AddMemoryCache()
                 .AddSingleton<IApplicationBuilder, ApplicationBuilder>()
                 .AddSingleton<ModelValidator, DefaultModelValidator>()
-                .AddScoped<IModelState, ModelState>()
+                .AddScoped<IModelState, ModelState>(_ => new ModelState(_))
                 .AddScoped<IModelMetadataProvider, DefaultModelMetadataProvider>()
                 .AddSingleton<IModelBinderProvider, ModelBinderDictionary>(_ => new ModelBinderDictionary()
                 {
@@ -33,7 +35,50 @@ namespace KiraNet.GutsMvc
                             new ControllerFilterProvider()
                         }
                 )
-                .AddSingleton<IClaimSchema, ClaimSchema>();
+                .AddSingleton<IClaimSchema, ClaimSchema>()
+                .AddSingleton<IFilterInvoker, FilterInvoker>();
+        }
+
+        public static IServiceCollection AddAutoInJection(this IServiceCollection services, Assembly assembly)
+        {
+            if (assembly == null)
+            {
+                return services;
+            }
+
+            var dependencyAttributeType = typeof(DependencyInjectionAttribute);
+            var dependencies = assembly.GetTypes()
+                .Where(x => x.IsDefined(dependencyAttributeType))
+                .Select(x =>
+                {
+                    var depency = x.GetCustomAttribute<DependencyInjectionAttribute>();
+                    if (depency.ImplementType == null)
+                    {
+                        depency.ImplementType = x;
+                    }
+
+                    return depency;
+                });
+
+            foreach (var transient in dependencies.Where(x => 
+                x.Dependency == DependencyType.Transient))
+            {
+                services.AddTransient(transient.ServiceType, transient.ImplementType);
+            }
+
+            foreach (var scoped in dependencies.Where(x => 
+                x.Dependency == DependencyType.Scoped))
+            {
+                services.AddScoped(scoped.ServiceType, scoped.ImplementType);
+            }
+
+            foreach (var singleton in dependencies.Where(x =>
+                x.Dependency == DependencyType.Singleton))
+            {
+                services.AddSingleton(singleton.ServiceType, singleton.ImplementType);
+            }
+
+            return services;
         }
     }
 }

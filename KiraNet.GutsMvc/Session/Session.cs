@@ -93,7 +93,8 @@ namespace KiraNet.GutsMvc
 
         public void Remove(string key)
         {
-            _sessions.Remove(key);
+            if (_sessions[key] != null)
+                _sessions.Remove(key);
         }
 
         public void Clear()

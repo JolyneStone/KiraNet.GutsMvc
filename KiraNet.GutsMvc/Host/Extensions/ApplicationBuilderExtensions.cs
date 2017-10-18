@@ -1,4 +1,5 @@
-﻿using KiraNet.GutsMvc.Route;
+﻿using KiraNet.GutsMvc.Implement;
+using KiraNet.GutsMvc.Route;
 using KiraNet.GutsMvc.View;
 using System;
 using System.Threading.Tasks;
@@ -62,12 +63,22 @@ namespace KiraNet.GutsMvc
                 ViewEngine.Current = new RazorViewEngine();
             }
 
-            return app.Use(new MvcHandler());
+            return app.Use(new MvcMiddlewareHandler());
         }
 
-        public static IApplicationBuilder ConfigureViews(this IApplicationBuilder app, string viewPath)
+        public static IApplicationBuilder ConfigureView(this IApplicationBuilder app, string viewPath)
         {
             new View.ViewPath(viewPath);
+            return app;
+        }
+
+        public static IApplicationBuilder ConfigureNotFoundView(this IApplicationBuilder app, string viewName)
+        {
+            if (String.IsNullOrWhiteSpace(viewName))
+            {
+                NotFoundUrlView.NotFoundViewName = viewName;
+            }
+
             return app;
         }
     }

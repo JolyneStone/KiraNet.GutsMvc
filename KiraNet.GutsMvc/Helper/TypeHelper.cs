@@ -39,7 +39,7 @@ namespace KiraNet.GutsMvc.Helper
         /// <returns></returns>
         public static Type ExtractGenericInterface(Type queryType, Type interfaceType)
         {
-            if(queryType.IsGenericType &&
+            if (queryType.IsGenericType &&
                 queryType.GetGenericTypeDefinition() == interfaceType)
             {
                 return queryType;
@@ -82,6 +82,30 @@ namespace KiraNet.GutsMvc.Helper
             }
 
             return false;
+        }
+
+        public static string GetTypeName(Type type)
+        {
+            if (type.IsGenericType)
+            {
+                var typeName = type.GetGenericTypeDefinition().FullName;
+                typeName = typeName.Substring(0, typeName.IndexOf('`')) + '<';
+                var generTypes = type.GetGenericArguments();
+                typeName = typeName + GetTypeName(generTypes[0]);
+                if (generTypes.Length > 1)
+                {
+                    for (int i = 1; i < generTypes.Length; i++)
+                    {
+                        typeName = typeName + ',' + GetTypeName(generTypes[i]);
+                    }
+                }
+
+                typeName = typeName + ">";
+                return typeName;
+            }
+
+            return type.FullName;
+
         }
     }
 }

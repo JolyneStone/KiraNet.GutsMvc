@@ -12,6 +12,11 @@ namespace KiraNet.GutsMvc.ModelValid
             _modelValidator = services.GetService<ModelValidator>();
         }
 
+        public ModelState(ModelValidator modelValidator)
+        {
+            _modelValidator = modelValidator ?? throw new ArgumentNullException(nameof(modelValidator));
+        }
+
         public IEnumerable<ModelWrapper> ModelWrappers { get; set; }
         public ModelValidDictionary ModelValidDictionary { get; set; }
 

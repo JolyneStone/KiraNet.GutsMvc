@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KiraNet.GutsMvc.Helper;
+using System;
 using System.Linq;
 using System.Reflection;
 
@@ -51,7 +52,7 @@ namespace KiraNet.GutsMvc.Implement
 
                 if (controllerTypeInfo == null)
                 {                  
-                    throw new InvalidOperationException($"无法找到指定的控制器：{descriptor.ControllerName}");
+                    throw new NotFoundUrlException();
                 }
                 else
                 {
