@@ -52,7 +52,7 @@ namespace KiraNet.GutsMvc.ModelValid
         private void ValidateModel(ModelValidDictionary modelValidDictionary, object model, Type modelType, string modelName)
         {
             var modelValid = GetModelValid(model, modelType, modelName);
-            if(modelValid!= null && modelValid.ValidResults!=null && modelValid.ValidResults.Any())
+            if (modelValid != null && modelValid.ValidResults != null && modelValid.ValidResults.Any())
             {
                 modelValidDictionary.Add(modelName, modelValid);
             }
@@ -127,7 +127,7 @@ namespace KiraNet.GutsMvc.ModelValid
             var propertyName = modelName + "." + property.Name;
             var validitions = property.GetCustomAttributes<ValidationAttribute>();
             var modelValid = new ModelValid();
-            ValidValidAttribute(property.GetValue(model), validitions, modelValid, propertyName);
+            ValidValidAttribute(new ValidationContext(model), property.GetValue(model), validitions, modelValid, propertyName);
 
             if (modelValid != null &&
                 modelValid.ValidResults != null &&
@@ -146,7 +146,7 @@ namespace KiraNet.GutsMvc.ModelValid
         private static ModelValid GetModelValid(object model, Type modelType, string modelName)
         {
             var modelValid = new ModelValid();
-            ValidValidAttribute(model, modelType, modelValid, modelName);
+            ValidValidAttribute(new ValidationContext(model), model, modelType, modelValid, modelName);
             ValidValidatableObject(model, modelType, modelValid, modelName);
             ValidDataErrorInfo(model, modelType, modelValid, modelName);
 
@@ -154,13 +154,13 @@ namespace KiraNet.GutsMvc.ModelValid
         }
 
 
-        private static void ValidValidAttribute(object model, Type modelType, ModelValid modelValid, string modelName)
+        private static void ValidValidAttribute(ValidationContext validationContext, object model, Type modelType, ModelValid modelValid, string modelName)
         {
             var validations = modelType.GetCustomAttributes<ValidationAttribute>();
-            ValidValidAttribute(model, validations, modelValid, modelName);
+            ValidValidAttribute(validationContext, model, validations, modelValid, modelName);
         }
 
-        private static void ValidValidAttribute(object model, IEnumerable<ValidationAttribute> validations, ModelValid modelValid, string modelName)
+        private static void ValidValidAttribute(ValidationContext validationContext, object model, IEnumerable<ValidationAttribute> validations, ModelValid modelValid, string modelName)
         {
             if (validations == null || !validations.Any())
             {
@@ -172,7 +172,8 @@ namespace KiraNet.GutsMvc.ModelValid
                 Exception exception = null;
                 try
                 {
-                    result = validation.IsValid(model);
+                    //result = validation.IsValid(model);
+                    result = validation.GetValidationResult(model, validationContext) == ValidationResult.Success;
                 }
                 catch (Exception ex)
                 {
@@ -187,7 +188,7 @@ namespace KiraNet.GutsMvc.ModelValid
 
                 modelValid.ValidResults.Add(new ValidFailure()
                 {
-                    ErrorMessage = validation.ErrorMessage?? validation.ToString(),
+                    ErrorMessage = validation.ErrorMessage ?? validation.ToString(),
                     ErrorMessageResourceName = validation.ErrorMessageResourceName,
                     ErrorMessageResourceType = validation.ErrorMessageResourceType,
                     ErrorMessageString = validation.FormatErrorMessage(""),

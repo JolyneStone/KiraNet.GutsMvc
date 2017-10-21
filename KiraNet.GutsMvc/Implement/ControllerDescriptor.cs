@@ -64,7 +64,7 @@ namespace KiraNet.GutsMvc.Implement
                     BindingFlags.Instance |
                     BindingFlags.IgnoreCase |
                     BindingFlags.InvokeMethod)
-                    .OrderBy(x => x.GetParameters().Length)
+                    .OrderByDescending(x => x.GetParameters().Length)
                     .OrderByDescending(x => x.IsDefined(typeof(HttpMethodAttribute)));
             if (actionMethods == null && !actionMethods.Any())
             {

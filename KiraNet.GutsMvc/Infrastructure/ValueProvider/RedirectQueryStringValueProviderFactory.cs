@@ -3,7 +3,7 @@ using System;
 
 namespace KiraNet.GutsMvc.Infrastructure
 {
-    public sealed class FormValueProviderFactory : IValueProviderFactory
+    public class RedirectQueryStringValueProviderFactory : IValueProviderFactory
     {
         public IValueProvider CreateValueProvider(ControllerContext controllerContext)
         {
@@ -12,19 +12,12 @@ namespace KiraNet.GutsMvc.Infrastructure
                 throw new ArgumentNullException(nameof(controllerContext));
             }
 
-            try
-            {
-                if(controllerContext.HttpContext.Request.Form == null)
-                {
-                    return null;
-                }
-
-                return new FormValueProvider(controllerContext.HttpContext.Request.Form);
-            }
-            catch
+            if (controllerContext.HttpContext.Request.RedirectQueryString == null)
             {
                 return null;
             }
+
+            return new RedirectQueryStringValueProvider(controllerContext);
         }
     }
 }

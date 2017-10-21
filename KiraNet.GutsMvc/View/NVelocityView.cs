@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace KiraNet.GutsMvc.View
 {
@@ -27,7 +28,20 @@ namespace KiraNet.GutsMvc.View
         public string ViewName { get; }
 
 
-        public async void Render(ViewContext viewContext)
+        public void Render(ViewContext viewContext)
+        {
+            var writer = _templateProvider.CompileTemplate(ViewName, viewContext).ConfigureAwait(false).GetAwaiter().GetResult();
+            string html = writer.GetStringBuilder()?.ToString();
+            if (String.IsNullOrWhiteSpace(html))
+            {
+                html = String.Empty;
+            }
+
+            var buffer = Encoding.UTF8.GetBytes(html);
+            viewContext.HttpContext.Response.ResponseStream.Write(buffer, 0, buffer.Length);
+        }
+
+        public async Task RenderAsync(ViewContext viewContext)
         {
             var writer = await _templateProvider.CompileTemplate(ViewName, viewContext);
             string html = writer.GetStringBuilder()?.ToString();

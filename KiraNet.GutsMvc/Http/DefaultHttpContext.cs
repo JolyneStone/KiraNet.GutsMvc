@@ -31,7 +31,7 @@ namespace KiraNet.GutsMvc
             this.Request = new DefaultHttpRequest(this);
             this.Response = new DefaultHttpResponse(this);
             this.ServiceRoot = service; // 这里的ServiceProvider和WebHost不是同一个实例，但同样是根ServiceProvider
-            this.Service = serviceScope;
+            this.Service = this.Service != null ? this.Service : serviceScope;
             this.BuilderSessionManager();
 
             Route = new RouteContext(this);

@@ -40,7 +40,7 @@ namespace KiraNet.GutsMvc
                     if (context.IsCancel)
                         return;
 
-                    middlewareHandle.MiddlewareExecute(context);
+                    await middlewareHandle.MiddlewareExecute(context);
                 };
             };
 

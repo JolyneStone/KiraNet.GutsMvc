@@ -4,6 +4,7 @@ using KiraNet.GutsMvc.View;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace KiraNet.GutsMvc
 {
@@ -12,7 +13,7 @@ namespace KiraNet.GutsMvc
     /// </summary>
     internal sealed class MvcMiddlewareHandler : IMiddlewareHandle
     {
-        public void MiddlewareExecute(HttpContext context)
+        public async Task MiddlewareExecute(HttpContext context)
         {
             var route = context.RouteEntity;
             if (route == null)
@@ -21,12 +22,10 @@ namespace KiraNet.GutsMvc
                 return;
             }
 
-            ExecuteMvc(context);
+            await ExecuteMvc(context);
         }
 
-
-
-        private void ExecuteMvc(HttpContext context)
+        private async Task ExecuteMvc(HttpContext context)
         {
 
             var controllerContext = new ControllerContext(context);
@@ -35,8 +34,8 @@ namespace KiraNet.GutsMvc
             try
             {
                 var controller = controllerBuilder.ControllerBuild();
+                await controller.Execute();
                 controllerBuilder.ControllerRelease();
-                controller.Execute();
             }
             catch (NotFoundUrlException)
             {

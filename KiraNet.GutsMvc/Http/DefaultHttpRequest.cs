@@ -32,6 +32,9 @@ namespace KiraNet.GutsMvc
         public override RouteEntity RouteEntity { get; internal set; }
         //public override RouteData RouteData { get; internal set; }
 
+        public override NameValueCollection RedirectQueryString { get; internal set; }
+            
+
         public override IFormCollection Form
         {
             get => _formFeature.ReadForm();

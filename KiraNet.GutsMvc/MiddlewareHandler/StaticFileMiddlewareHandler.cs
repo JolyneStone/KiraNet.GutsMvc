@@ -1,12 +1,14 @@
 ﻿using KiraNet.GutsMvc.StaticFiles;
+using System;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace KiraNet.GutsMvc
 {
     internal sealed class StaticFileMiddlewareHandler : IMiddlewareHandle
     {
-        public void MiddlewareExecute(HttpContext httpContext)
+        public async Task MiddlewareExecute(HttpContext httpContext)
         {
             if (!IsResourceRequest(httpContext.Request.RawUrl))
             {
@@ -55,7 +57,7 @@ namespace KiraNet.GutsMvc
 
             httpContext.Response.ContentType = GetContentType(path);
             byte[] contentBytes = File.ReadAllBytes(path);
-            httpContext.Response.ResponseStream.Write(contentBytes, 0, contentBytes.Length);
+            await httpContext.Response.ResponseStream.WriteAsync(contentBytes, 0, contentBytes.Length);
 
             httpContext.IsCancel = true;
         }
@@ -67,7 +69,9 @@ namespace KiraNet.GutsMvc
                 return false;
             }
 
-            return Path.HasExtension(uri);
+            var extension = Path.GetExtension(uri);
+
+            return !String.IsNullOrWhiteSpace(extension) && !extension.Equals(".com", StringComparison.OrdinalIgnoreCase);
         }
 
         private string GetContentType(string path)

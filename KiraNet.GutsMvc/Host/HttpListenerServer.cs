@@ -52,29 +52,62 @@ namespace KiraNet.GutsMvc
 
             Listener.BeginGetContext(GetServerCallback<TContext>, application);
 
-            Task.Factory.StartNew(() =>
-            {
-                IHttpListenerContextFeature feature = new HttpListenerContextFeature(httpListenerContext, Listener);
-                IFeatureCollection contextFeatures = new FeatureCollection(Services)
-                    .Set<IHttpRequestFeature>(feature.RequestFeature)
-                    .Set<IHttpResponseFeature>(feature.ResponseFeature);
+            //var t = await Task.Factory.StartNew(async () =>
+            // {
+            //     IHttpListenerContextFeature feature = new HttpListenerContextFeature(httpListenerContext, Listener);
+            //     IFeatureCollection contextFeatures = new FeatureCollection(Services)
+            //         .Set<IHttpRequestFeature>(feature.RequestFeature)
+            //         .Set<IHttpResponseFeature>(feature.ResponseFeature);
 
-                //TContext context = application.CreateContext(contextFeatures);
+            //     //TContext context = application.CreateContext(contextFeatures);
 
-                //application.ProcessRequestAsync(context)
-                //    .ContinueWith(_ =>
-                //    {
-                //        httpListenerContext.Request.InputStream.Close();
-                //        httpListenerContext.Response.OutputStream.Close();
-                //        httpListenerContext.Response.Close();
-                //        application.DisposeContext(context, _.Exception);
-                //    });
+            //     //application.ProcessRequestAsync(context)
+            //     //    .ContinueWith(_ =>
+            //     //    {
+            //     //        httpListenerContext.Request.InputStream.Close();
+            //     //        httpListenerContext.Response.OutputStream.Close();
+            //     //        httpListenerContext.Response.Close();
+            //     //        application.DisposeContext(context, _.Exception);
+            //     //    });
 
-                using (TContext context = application.CreateContext(contextFeatures))
-                {
-                    application.ProcessRequestAsync(context).ConfigureAwait(false).GetAwaiter().GetResult();
-                }
-            });
+            //     TContext context = application.CreateContext(contextFeatures);
+
+            //     //await application.ProcessRequestAsync(context).ConfigureAwait(false).GetAwaiter().GetResult();
+            //     //application.ProcessRequestAsync(context).ConfigureAwait(false).GetAwaiter()
+            //     //.OnCompleted(() => context.Dispose());
+            //     await application.ProcessRequestAsync(context);
+            //     return context;
+            // }).ConfigureAwait(false).GetAwaiter().GetResult();
+            //t.Dispose();
+
+            var t = Task.Factory.StartNew(() =>
+             {
+                 IHttpListenerContextFeature feature = new HttpListenerContextFeature(httpListenerContext, Listener);
+                 IFeatureCollection contextFeatures = new FeatureCollection(Services)
+                     .Set<IHttpRequestFeature>(feature.RequestFeature)
+                     .Set<IHttpResponseFeature>(feature.ResponseFeature);
+
+                 //TContext context = application.CreateContext(contextFeatures);
+
+                 //application.ProcessRequestAsync(context)
+                 //    .ContinueWith(_ =>
+                 //    {
+                 //        httpListenerContext.Request.InputStream.Close();
+                 //        httpListenerContext.Response.OutputStream.Close();
+                 //        httpListenerContext.Response.Close();
+                 //        application.DisposeContext(context, _.Exception);
+                 //    });
+
+                 TContext context = application.CreateContext(contextFeatures);
+
+                 //await application.ProcessRequestAsync(context).ConfigureAwait(false).GetAwaiter().GetResult();
+                 //application.ProcessRequestAsync(context).ConfigureAwait(false).GetAwaiter()
+                 //.OnCompleted(() => context.Dispose());
+                 application.ProcessRequestAsync(context).ConfigureAwait(false).GetAwaiter().GetResult();
+                 return context;
+             });
+
+            (t.ConfigureAwait(false).GetAwaiter().GetResult()).Dispose();
         }
     }
 }

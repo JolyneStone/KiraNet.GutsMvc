@@ -1,7 +1,7 @@
 ﻿using KiraNet.GutsMvc.Filter;
 using KiraNet.GutsMvc.Implement;
 using Microsoft.Extensions.DependencyInjection;
-
+using System.Threading.Tasks;
 
 namespace KiraNet.GutsMvc
 {
@@ -13,18 +13,20 @@ namespace KiraNet.GutsMvc
             filterInvoker.FilterInvoke(controllerContext, InvokeAction);
         }
 
-        void IActionInvoker.InvokeActionAsync(ControllerContext controllerContext)
+        async Task IActionInvoker.InvokeActionAsync(ControllerContext controllerContext)
         {
             IFilterInvoker filterInvoker = controllerContext.HttpContext.Service.GetRequiredService<IFilterInvoker>();
-            filterInvoker.FilterInvoke(controllerContext, InvokeActionAsync);
+            await filterInvoker.FilterInvoke(controllerContext, InvokeActionAsync);
         }
 
-        protected virtual void InvokeAction(ControllerContext controllerContext, object[] paramValues)
+        protected virtual async Task InvokeAction(ControllerContext controllerContext, object[] paramValues)
         {
+            await Task.CompletedTask;
         }
 
-        protected virtual void InvokeActionAsync(ControllerContext controllerContext, object[] paramValues)
+        protected virtual async Task InvokeActionAsync(ControllerContext controllerContext, object[] paramValues)
         {
+            await Task.CompletedTask;
         }
     }
 }

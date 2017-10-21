@@ -9,7 +9,7 @@ namespace KiraNet.GutsMvc.Implement
     /// </summary>
     public class ReflectActionInvoker : ActionInvoker
     {
-        protected override void InvokeAction(ControllerContext controllerContext, object[] paramValues)
+        protected override async Task InvokeAction(ControllerContext controllerContext, object[] paramValues)
         {
             if (controllerContext == null)
             {
@@ -22,9 +22,10 @@ namespace KiraNet.GutsMvc.Implement
             //    .ToArray();
             IActionResult actionResult = method.Invoke(controllerContext.Controller, paramValues) as IActionResult;
             actionResult.ExecuteResult(controllerContext);
+            await Task.CompletedTask;
         }
 
-        protected override void InvokeActionAsync(ControllerContext controllerContext, object[] paramValues)
+        protected override async Task InvokeActionAsync(ControllerContext controllerContext, object[] paramValues)
         {
             var method = controllerContext.ActionDescriptor.Action;
             var resultType = method.ReturnType;
@@ -36,10 +37,10 @@ namespace KiraNet.GutsMvc.Implement
             //var parameters = controllerContext.ParameterDescriptors
             //    .Select(x => x.ParameterValue)
             //    .ToArray();
-            invokeTaskAsyncMethod.Invoke(this, new object[] { controllerContext, method.Invoke(controllerContext.Controller, paramValues) });
+            await (invokeTaskAsyncMethod.Invoke(this, new object[] { controllerContext, method.Invoke(controllerContext.Controller, paramValues) }) as Task);
         }
 
-        private async void InvokeTaskAsync<T>(ControllerContext controllerContext, object task)
+        private async Task InvokeTaskAsync<T>(ControllerContext controllerContext, object task)
         {
             if (task == null)
             {

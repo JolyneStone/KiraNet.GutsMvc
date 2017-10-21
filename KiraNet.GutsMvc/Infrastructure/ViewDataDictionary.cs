@@ -102,7 +102,19 @@ namespace KiraNet.GutsMvc
             }
         }
 
-        public virtual object this[string key] { get => _dictionary[key]; set => _dictionary[key] = value; }
+        public virtual object this[string key]
+        {
+            get
+            {
+                if(_dictionary.TryGetValue(key, out var value))
+                {
+                    return value;
+                }
+
+                return null;
+            }
+            set => _dictionary[key] = value;
+        }
 
         public ICollection<string> Keys => ((IDictionary<string, object>)_dictionary).Keys;
 

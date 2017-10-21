@@ -46,7 +46,6 @@ namespace KiraNet.GutsMvc.View
 
 
             //templateEngine.Options.DefaultImports = RazorSourceDocument.Create("", null);
-
             var cshtmlFile = razorProject.GetItem(targetPath);
             var razorResult = GenerateCodeFile(templateEngine, cshtmlFile);
             razorResult.ClassName = className;

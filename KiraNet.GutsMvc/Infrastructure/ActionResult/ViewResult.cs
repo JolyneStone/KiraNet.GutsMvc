@@ -42,10 +42,25 @@ namespace KiraNet.GutsMvc
             //}
         }
 
-        public Task ExecuteResultAsync(ControllerContext context)
+        public async Task ExecuteResultAsync(ControllerContext context)
         {
-            ExecuteResult(context);
-            return Task.CompletedTask;
+            if (String.IsNullOrWhiteSpace(ViewName))
+            {
+                ViewName = context.RouteEntity.Action;
+            }
+
+            if (View == null)
+            {
+                View = GetView(context);
+            }
+
+            if (ModelType != null)
+            {
+                context.ModelType = ModelType;
+            }
+
+            ViewContext viewContext = new ViewContext(context, Model);
+            await View?.RenderAsync(viewContext);
         }
     }
 }

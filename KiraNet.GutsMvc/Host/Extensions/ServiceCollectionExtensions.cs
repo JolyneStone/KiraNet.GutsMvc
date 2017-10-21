@@ -20,12 +20,12 @@ namespace KiraNet.GutsMvc
                 .AddSingleton<ModelValidator, DefaultModelValidator>()
                 .AddScoped<IModelState, ModelState>(_ => new ModelState(_))
                 .AddScoped<IModelMetadataProvider, DefaultModelMetadataProvider>()
-                .AddSingleton<IModelBinderProvider, ModelBinderDictionary>(_ => new ModelBinderDictionary()
+                .AddScoped<IModelBinderProvider, ModelBinderDictionary>(_ => new ModelBinderDictionary()
                 {
                     {typeof(IFormFile), new FileModelBinder() },
                     {typeof(byte[]), new ByteArrayModelBinder() },
                     {typeof(CancellationToken), new CancellationTokenModelBinder() },
-                    {typeof(IModelBinder), new OrdinaryModelBinder() },
+                    {typeof(IModelBinder), new OrdinaryModelBinder(_) },
                     {typeof(IServiceProvider), new ServiceModelBinder() }
                 })
                 .AddSingleton<IFilterProvider, FilterProviderCollection>(_ => new FilterProviderCollection

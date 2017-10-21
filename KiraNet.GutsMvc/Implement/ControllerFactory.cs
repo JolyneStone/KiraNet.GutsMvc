@@ -32,7 +32,7 @@ namespace KiraNet.GutsMvc.Implement
                 var index = 0;
                 for (; index < parameters.Length; index++)
                 {
-                    var value = serviceProvider.GetRequiredService(parameters[index].ParameterType);
+                    var value = serviceProvider.GetService(parameters[index].ParameterType);
                     if (value == null)
                     {
                         break;

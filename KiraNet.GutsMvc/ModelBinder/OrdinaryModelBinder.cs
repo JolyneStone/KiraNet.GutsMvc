@@ -14,20 +14,20 @@ namespace KiraNet.GutsMvc.ModelBinder
 {
     public class OrdinaryModelBinder : IModelBinder
     {
-        private ModelBinderDictionary _binders;
+        private IModelBinderProvider _binders;
         private IModelMetadataProvider _metadataProvider;
 
-        internal ModelBinderDictionary Binders
+        internal IModelBinderProvider Binders
         {
             get
             {
                 if (_binders == null)
                 {
-                    _binders = ModelBinders.Binders;
-                    if (!_binders.ContainsKey(typeof(IModelBinder)))
-                    {
-                        _binders.Add(typeof(IModelBinder), this);
-                    }
+                    _binders = _services.GetRequiredService<IModelBinderProvider>();
+                    //if (!_binders.ContainsKey(typeof(IModelBinder)))
+                    //{
+                    //    _binders.Add(typeof(IModelBinder), this);
+                    //}
                 }
 
                 return _binders;
@@ -42,7 +42,7 @@ namespace KiraNet.GutsMvc.ModelBinder
         {
             get
             {
-                if(_metadataProvider == null)
+                if (_metadataProvider == null)
                 {
                     _metadataProvider = _services.GetRequiredService<IModelMetadataProvider>();
                 }
@@ -51,10 +51,11 @@ namespace KiraNet.GutsMvc.ModelBinder
             }
         }
 
-        private IServiceProvider _services;
+        private readonly IServiceProvider _services;
 
-        public OrdinaryModelBinder()
+        public OrdinaryModelBinder(IServiceProvider services)
         {
+            _services = services;
         }
 
 

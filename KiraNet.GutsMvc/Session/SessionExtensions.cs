@@ -16,11 +16,14 @@ namespace KiraNet.GutsMvc
         /// <returns></returns>
         public static bool Set<T>(this Session session, string key, T val)
         {
-            if (string.IsNullOrWhiteSpace(key) || val == null) { return false; }
+            if (string.IsNullOrWhiteSpace(key) || val == null)
+            {
+                return false;
+            }
 
             var strVal = JsonConvert.SerializeObject(val);
             var value = Encoding.UTF8.GetBytes(strVal);
-            session.Set(key, value);
+            session.AddOrSet(key, value);
             return true;
         }
 

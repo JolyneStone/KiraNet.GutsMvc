@@ -16,7 +16,7 @@ namespace KiraNet.GutsMvc.Implement
     {
         // 用于缓存Invoke方法的MethodInfo
         private static MethodInfo _invokeMethod;
-        protected override void InvokeAction(ControllerContext controllerContext, object[] paramValues)
+        protected override async Task InvokeAction(ControllerContext controllerContext, object[] paramValues)
         {
             if (controllerContext == null)
             {
@@ -42,9 +42,10 @@ namespace KiraNet.GutsMvc.Implement
                 );
 
             Expression.Lambda<Action>(callExpr).Compile()();
+            await Task.CompletedTask;
         }
 
-        protected override void InvokeActionAsync(ControllerContext controllerContext, object[] paramValues)
+        protected override async Task InvokeActionAsync(ControllerContext controllerContext, object[] paramValues)
         {
             if (controllerContext == null)
             {
@@ -69,7 +70,7 @@ namespace KiraNet.GutsMvc.Implement
                 Expression.Constant("1", typeof(string))
                 );
 
-            Expression.Lambda<Action>(callExpr).Compile()();
+            await Expression.Lambda<Func<Task>>(callExpr).Compile()();
         }
 
         /// <summary>
@@ -78,7 +79,7 @@ namespace KiraNet.GutsMvc.Implement
         /// <typeparam name="T">表示IActionResult的类型</typeparam>
         /// <param name="controllerContext"></param>
         /// <param name="isActionAsync">"0"代表同步调用，否则代表异步调用</param>
-        private async void Invoke<T>(ControllerContext controllerContext, object[] paramValues, string isActionAsync)
+        private async Task Invoke<T>(ControllerContext controllerContext, object[] paramValues, string isActionAsync)
             where T : IActionResult
         {
             IActionResult actionResult;

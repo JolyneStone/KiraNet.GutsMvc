@@ -5,6 +5,7 @@ using KiraNet.GutsMvc.Infrastructure;
 using KiraNet.GutsMvc.ModelValid;
 using KiraNet.GutsMvc.Route;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -138,7 +139,7 @@ namespace KiraNet.GutsMvc
         /// 获取将执行的Action方法，并为之绑定参数
         /// 利用ActionInvoke属性执行Action方法
         /// </summary>
-        internal virtual void Execute()
+        internal virtual async Task Execute()
         {
             if (_valueProvider == null)
             {
@@ -161,7 +162,7 @@ namespace KiraNet.GutsMvc
                 returnType.GetGenericTypeDefinition() == typeof(Task<>))
             {
                 // 调用异步Action
-                ActionInvoker.InvokeActionAsync(ControllerContext);
+                await ActionInvoker.InvokeActionAsync(ControllerContext);
             }
             else
             {
@@ -191,6 +192,27 @@ namespace KiraNet.GutsMvc
             return new RedirectResult()
             {
                 Url = url
+            };
+        }
+
+        protected virtual RedirectToActionResult RedirectToAction(string viewName, IDictionary<string, object> queryString = null)
+        {
+            return RedirectToAction(null, viewName, queryString);
+        }
+
+        protected virtual RedirectToActionResult RedirectToAction(string controllerName, string viewName, IDictionary<string,object> queryString = null)
+        {
+            if(String.IsNullOrWhiteSpace(controllerName))
+            {
+                controllerName = ControllerContext.RouteEntity.Controller;
+            }
+
+            return new RedirectToActionResult
+            {
+                ControllerName = controllerName,
+                ViewName = viewName,
+                QueryString = queryString,
+                HttpContext = HttpContext
             };
         }
 

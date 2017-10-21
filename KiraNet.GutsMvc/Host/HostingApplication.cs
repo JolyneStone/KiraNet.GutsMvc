@@ -43,18 +43,19 @@ namespace KiraNet.GutsMvc
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public Task ProcessRequestAsync(Context context)
+        public async Task ProcessRequestAsync(Context context)
         {
+
             try
             {
-                return MiddlewareProcessor(context.HttpContext);
+                await MiddlewareProcessor(context.HttpContext);
+                //await MiddlewareProcessor(context.HttpContext);
+                //context.Dispose();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Console.WriteLine($"Expection: {ex.GetType().Name}:{ex.Message}");
                 context.HttpContext.IsCancel = true;
                 context.HttpContext.Response.StatusCode = 404;
-                return Task.Run(() => { });
             }
         }
     }

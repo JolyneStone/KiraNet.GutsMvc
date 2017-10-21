@@ -1,5 +1,6 @@
 ﻿using KiraNet.GutsMvc.Helper;
 using System;
+using System.Threading.Tasks;
 
 namespace KiraNet.GutsMvc.View
 {
@@ -30,6 +31,18 @@ namespace KiraNet.GutsMvc.View
 
         public void Render(ViewContext viewContext)
         {
+            GetView(viewContext);
+            _razorInstance.ExecuteViewAsync(viewContext, null).ConfigureAwait(false).GetAwaiter().GetResult();
+        }
+
+        public async Task RenderAsync(ViewContext viewContext)
+        {
+            GetView(viewContext);
+            await _razorInstance.ExecuteViewAsync(viewContext, null);
+        }
+
+        private void GetView(ViewContext viewContext)
+        {
             if (_razorInstance == null)
             {
                 var razorInstance = _templateProvider.CompileTemplate(ViewName, viewContext).GetAwaiter().GetResult();
@@ -38,8 +51,6 @@ namespace KiraNet.GutsMvc.View
                 _razorInstance = razorInstance;
                 _lock.Exit();
             }
-
-            _razorInstance.ExecuteViewAsync(viewContext, null).ConfigureAwait(false).GetAwaiter().GetResult();
         }
     }
 }

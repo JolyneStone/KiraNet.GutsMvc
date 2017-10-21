@@ -89,7 +89,8 @@ namespace KiraNet.GutsMvc.Implement
                     }
                 }
 
-                var modelBinder = ModelBinders.Binders.GetBinder(paramDescriptor.ParameterType);
+                var binderProviders = Services.GetRequiredService<IModelBinderProvider>();
+                var modelBinder = binderProviders.GetBinder(paramDescriptor.ParameterType);
                 var modelMetadata = Services.GetRequiredService<IModelMetadataProvider>().GetMetadataForType(null, paramDescriptor.ParameterType);
                 //var modelBinderModelBinders.Binders.GetBinder(paramDescriptor.ParameterType);
 
@@ -106,7 +107,7 @@ namespace KiraNet.GutsMvc.Implement
                 }
 
                 // 尝试依赖注入
-                modelBinder = ModelBinders.Binders.GetBinder(typeof(IServiceProvider));
+                modelBinder = binderProviders.GetBinder(typeof(IServiceProvider));
 
                 if (TryBindModel(modelBinder, modelMetadata, controller, "", out paramValue))
                 {

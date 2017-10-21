@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Security.Principal;
 using System.Threading;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace KiraNet.GutsMvc.Filter
 {
     public class FilterInvoker : IFilterInvoker
     {
-        public void FilterInvoke(ControllerContext controllerContext, Action<ControllerContext, object[]> invokeAction)
+        public async Task FilterInvoke(ControllerContext controllerContext, Func<ControllerContext, object[], Task> invokeAction)
         {
             var filterCollection = GetFilters(controllerContext);
 
@@ -47,9 +48,10 @@ namespace KiraNet.GutsMvc.Filter
                 Exception exception = null;
                 try
                 {
-                    invokeAction(controllerContext, paramValues);
+                    await invokeAction(controllerContext, paramValues);
                 }
                 catch (Exception ex)
+
                 {
                     exception = ex;
                 }

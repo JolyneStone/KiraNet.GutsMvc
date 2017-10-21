@@ -1,7 +1,7 @@
-﻿using KiraNet.GutsMvc.Infrastructure;
+﻿using KiraNet.GutsMvc.Implement;
 using System.Globalization;
 
-namespace KiraNet.GutsMvc.Implement
+namespace KiraNet.GutsMvc.Infrastructure
 {
     public sealed class QueryStringValueProvider : NameValueCollectionValueProvider
     {

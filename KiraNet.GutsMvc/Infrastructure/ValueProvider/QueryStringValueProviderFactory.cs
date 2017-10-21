@@ -7,19 +7,16 @@ namespace KiraNet.GutsMvc.Infrastructure
     {
         public IValueProvider CreateValueProvider(ControllerContext controllerContext)
         {
-            if(controllerContext == null)
+            if (controllerContext == null)
             {
                 throw new ArgumentNullException(nameof(controllerContext));
             }
 
-            try
-            {
-                return new QueryStringValueProvider(controllerContext);
-            }
-            catch
+            if (controllerContext.HttpContext.Request.QueryString == null)
             {
                 return null;
             }
+            return new QueryStringValueProvider(controllerContext);
         }
     }
 }

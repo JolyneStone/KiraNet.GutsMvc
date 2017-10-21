@@ -14,6 +14,12 @@ namespace KiraNet.GutsMvc.Infrastructure
 
             try
             {
+                if(controllerContext.HttpContext.Request.Form==null ||
+                    controllerContext.HttpContext.Request.Form.Files==null)
+                {
+                    return null;
+                }
+
                 return new FileCollectionValueProvider(controllerContext.HttpContext.Request.Form.Files);
             }
             catch
