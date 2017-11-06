@@ -65,7 +65,7 @@ namespace KiraNet.GutsMvc.Filter
             _controllerFilters.TryGetValue(controllerType, out var filterAttributes);
             _sync.Exit();
 
-            if (filterAttributes == null)
+            if (filterAttributes != null)
             {
                 return filterAttributes;
             }

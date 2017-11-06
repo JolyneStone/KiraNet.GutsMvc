@@ -51,7 +51,6 @@ namespace KiraNet.GutsMvc.Filter
                     await invokeAction(controllerContext, paramValues);
                 }
                 catch (Exception ex)
-
                 {
                     exception = ex;
                 }

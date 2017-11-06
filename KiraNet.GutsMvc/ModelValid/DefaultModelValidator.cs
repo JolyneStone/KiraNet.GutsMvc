@@ -146,13 +146,12 @@ namespace KiraNet.GutsMvc.ModelValid
         private static ModelValid GetModelValid(object model, Type modelType, string modelName)
         {
             var modelValid = new ModelValid();
-            ValidValidAttribute(new ValidationContext(model), model, modelType, modelValid, modelName);
+            ValidValidAttribute(model != null ? new ValidationContext(model) : null, model, modelType, modelValid, modelName);
             ValidValidatableObject(model, modelType, modelValid, modelName);
             ValidDataErrorInfo(model, modelType, modelValid, modelName);
 
             return modelValid;
         }
-
 
         private static void ValidValidAttribute(ValidationContext validationContext, object model, Type modelType, ModelValid modelValid, string modelName)
         {
@@ -172,8 +171,10 @@ namespace KiraNet.GutsMvc.ModelValid
                 Exception exception = null;
                 try
                 {
-                    //result = validation.IsValid(model);
-                    result = validation.GetValidationResult(model, validationContext) == ValidationResult.Success;
+                    if (validationContext == null)
+                        result = validation.IsValid(model);
+                    else
+                        result = validation.GetValidationResult(model, validationContext) == ValidationResult.Success;
                 }
                 catch (Exception ex)
                 {

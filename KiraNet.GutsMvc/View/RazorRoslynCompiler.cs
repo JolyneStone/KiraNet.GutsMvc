@@ -1,5 +1,8 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace KiraNet.GutsMvc.View
@@ -87,29 +90,34 @@ namespace KiraNet.GutsMvc.View
             //var templateType = LoadTypeForAssemblyStream(assemblyStream);
             //return templateType;
             //}
-
-            var a = typeof(object).Assembly.GetName();
-
-            var options = ScriptOptions.Default
-             .AddReferences(_applicationReferences);
-
-            var defaultNamespaces = new string[] { "System", "System.Threading.Tasks", "KiraNet.GutsMvc.View" };
+            var defaultNamespaces = new List<string> { "System", "System.Threading.Tasks", "KiraNet.GutsMvc.View" };
 
 
             if (namespaces != null && namespaces.Length > 0)
             {
-                defaultNamespaces = defaultNamespaces.Except(namespaces).ToArray();
+                defaultNamespaces.AddRange(namespaces.Except(defaultNamespaces));
             }
 
-            options.AddImports(defaultNamespaces);
+            var options = ScriptOptions.Default
+                .AddImports(defaultNamespaces)
+                .AddReferences(_applicationReferences);
+
 
             lock (_sync)
             {
                 var result = CSharpScript.Create(code, options)
                     .ContinueWith($"new {className}()");
-                var value = result.RunAsync().ConfigureAwait(false).GetAwaiter().GetResult().ReturnValue;
-                var view = value as RazorPageViewBase;
-                return view;
+                try
+                {
+                    var value = result.RunAsync().ConfigureAwait(false).GetAwaiter().GetResult().ReturnValue;
+                    var view = value as RazorPageViewBase;
+                    return view;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                    return null;
+                }
             }
         }
 

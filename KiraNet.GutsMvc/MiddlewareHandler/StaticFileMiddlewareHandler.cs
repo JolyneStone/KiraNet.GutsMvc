@@ -14,13 +14,11 @@ namespace KiraNet.GutsMvc
             {
                 return;
             }
-
-            var path = (
-                    Directory.GetCurrentDirectory() + @"\" +
+            var separator = Path.DirectorySeparatorChar;
+            var path =
+                    Directory.GetCurrentDirectory() + separator +
                     httpContext.Request.RawUrl.ToString()
-                    .Replace("/", @"\")
-                    .Replace("//", @"\")
-                ).Replace("\\\\", "\\");
+                    .Replace('/', separator);
 
             var file = new FileInfo(path);
             if (!file.Exists)

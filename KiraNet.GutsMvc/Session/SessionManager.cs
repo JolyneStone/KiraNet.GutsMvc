@@ -38,6 +38,7 @@ namespace KiraNet.GutsMvc
             Cookie cookie;
             if ((cookie = context.Request.Cookies[COOKIE_SESSION_ID]) != null)
             {
+                sessionId = cookie.Value;
                 if ((cookie = context.Response.Cookies[COOKIE_SESSION_ID]) != null)
                     return;
 
@@ -68,19 +69,37 @@ namespace KiraNet.GutsMvc
 
             SessionCreating?.Invoke(this, new SessionArgs(null));
             Cookie cookie;
-            if((cookie=_context.Request.Cookies[COOKIE_SESSION_ID])!=null)
+            if ((cookie = _context.Request.Cookies[COOKIE_SESSION_ID]) != null)
             {
-                if(_sessionDictionary.TryGetValue(cookie.Name, out session))
+                if (_sessionDictionary.TryGetValue(cookie.Value, out session))
                 {
                     SessionCreated?.Invoke(this, new SessionArgs(session, true));
                     return true;
                 }
+                else
+                {
+                    session = new Session(sessionId, ExpireTime);
+                    if (_sessionDictionary.TryAdd(session.Id, session))
+                    {
+                        //_context.Session = session;
+                        SessionCreated?.Invoke(this, new SessionArgs(session, true));
+                        return true;
+                    }
+                    else
+                    {
+                        SessionClosed?.Invoke(this, new SessionArgs(session, false));
+                        return false;
+                    }
+                }
             }
 
-            session = new Session(sessionId, ExpireTime); 
+            session = new Session(sessionId, ExpireTime);
 
-            _context.Response.Cookies.Add(new Cookie(COOKIE_SESSION_ID, session.Id) { Expires = session.ExpireTime });
-
+            _context.Response.Cookies.Add(new Cookie(COOKIE_SESSION_ID, session.Id)
+            {
+                Expires = session.ExpireTime,
+                Path="/"
+            });
             if (_sessionDictionary.TryAdd(session.Id, session))
             {
                 //_context.Session = session;

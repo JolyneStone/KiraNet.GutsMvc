@@ -3,6 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -65,10 +66,11 @@ namespace KiraNet.GutsMvc.View
             if (!String.IsNullOrWhiteSpace(Layout))
             {
                 // 有布局页方式
+                var parentViewContext = new ViewContext(viewContext);
                 var cache = viewContext.HttpContext.Service.GetService<IMemoryCache>();
                 if (!cache.TryGetValue<RazorPageViewBase>(Layout, out var parentViewBase))
                 {
-                    parentViewBase = await new RazorTemplateProvider("Shared").CompileTemplate(Layout, viewContext);
+                    parentViewBase = await new RazorTemplateProvider("Shared").CompileTemplate(Layout, parentViewContext);
 
                     _lock.Enter();
                     cache.Set<RazorPageViewBase>(Layout, parentViewBase,
@@ -76,11 +78,17 @@ namespace KiraNet.GutsMvc.View
                     _lock.Exit();
                 }
 
-
-                await parentViewBase.ExecuteViewAsync(viewContext, wirter =>
+                try
                 {
-                    wirter.Append(Output.ToString());
-                });
+                    await parentViewBase.ExecuteViewAsync(parentViewContext, wirter =>
+                    {
+                        wirter.Append(Output.ToString());
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
 
                 _isCanWrite = false;
             }
@@ -98,7 +106,7 @@ namespace KiraNet.GutsMvc.View
 
         private async Task WriteStream()
         {
-            if(_isCanWrite)
+            if (_isCanWrite)
             {
                 using (var writer = new StreamWriter(Response.ResponseStream, UTF8NoBOM, 4096, leaveOpen: true))
                 {
@@ -149,6 +157,11 @@ namespace KiraNet.GutsMvc.View
                 AttributeValues = new List<string>();
             }
 
+            if (value == null)
+            {
+                return;
+            }
+
             AttributeValues.Add(value.ToString());
         }
 
@@ -162,7 +175,8 @@ namespace KiraNet.GutsMvc.View
 
         protected void EndWriteAttribute()
         {
-            var attributes = string.Join(" ", AttributeValues);
+            //var attributes = string.Join(" ", AttributeValues);
+            var attributes = string.Join("", AttributeValues);
             Output.Append(attributes);
             AttributeValues = null;
 
@@ -273,11 +287,21 @@ namespace KiraNet.GutsMvc.View
 
         protected void WriteTo(StringBuilder writer, string value)
         {
+            if (value == null)
+            {
+                return;
+            }
+
             WriteLiteralTo(writer, HtmlEncoder.Encode(value));
         }
 
         protected void WriteLiteralTo(StringBuilder writer, object value)
         {
+            if (value == null)
+            {
+                return;
+            }
+
             WriteLiteralTo(writer, Convert.ToString(value, CultureInfo.InvariantCulture));
         }
 

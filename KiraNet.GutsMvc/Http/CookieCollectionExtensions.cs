@@ -12,7 +12,6 @@ namespace KiraNet.GutsMvc
 
         public static void Remove(this CookieCollection cookieCollection, string cookieName)
         {
-
             var cookie = cookieCollection[cookieName];
             if (cookie == null)
                 return;
@@ -25,6 +24,5 @@ namespace KiraNet.GutsMvc
         {
             return cookieCollection[cookieName];
         }
-
     }
 }

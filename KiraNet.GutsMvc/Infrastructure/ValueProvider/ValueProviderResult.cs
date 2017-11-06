@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KiraNet.GutsMvc.Helper;
+using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
@@ -169,7 +170,7 @@ namespace KiraNet.GutsMvc.Infrastructure
             }
 
             CultureInfo cultureToUse = culture ?? Culture;
-            return PossibleArrayType(cultureToUse, RawValue, type);
+            return PossibleArrayType(cultureToUse, StrRawValue, type);
         }
 
         private static object PossibleArrayType(CultureInfo culture, object value, Type destinationType)
@@ -229,16 +230,19 @@ namespace KiraNet.GutsMvc.Infrastructure
             }
 
             string valueAsString = value as string;
-            if (valueAsString != null && String.IsNullOrWhiteSpace(valueAsString))
+            if (valueAsString != null && 
+                destinationType == typeof(string) &&
+                String.IsNullOrWhiteSpace(valueAsString))
             {
                 return String.Empty;
             } // 进行到下面的代码则表示value非字符串类型或为非空字符串
 
             // 如果该类型是可空类型，则尝试提取出基础类型
             Type underlyingType = Nullable.GetUnderlyingType(destinationType);
-            if (underlyingType != null)
+            if (underlyingType == null)
             {
-                destinationType = underlyingType;
+                //destinationType = underlyingType;
+                underlyingType = destinationType;
             }
 
             if (valueAsString == null)
@@ -248,7 +252,7 @@ namespace KiraNet.GutsMvc.Infrastructure
                 {
                     try
                     {
-                        return convertible.ToType(destinationType, culture);
+                        return convertible.ToType(underlyingType, culture);
                     }
                     catch
                     {
@@ -257,7 +261,7 @@ namespace KiraNet.GutsMvc.Infrastructure
             }
 
             // 将目标类型作为转换器
-            TypeConverter converter = TypeDescriptor.GetConverter(destinationType);
+            TypeConverter converter = TypeDescriptor.GetConverter(underlyingType);
             bool canConvertFrom = converter.CanConvertFrom(value.GetType()); // 是否能够将value类型转换为目标类型
             if (!canConvertFrom)
             {
@@ -265,31 +269,38 @@ namespace KiraNet.GutsMvc.Infrastructure
                 converter = TypeDescriptor.GetConverter(value.GetType());
             }
 
-            if (!(canConvertFrom || converter.CanConvertTo(destinationType))) 
+            if (!(canConvertFrom || converter.CanConvertTo(underlyingType))) 
             {
                 // 运行这里可以确定不能将value转换为目标类型，则用value作为转换器
                 // 尝试将int转换成enum
-                if (destinationType.IsEnum && value is int)
+                if (underlyingType.IsEnum && value is int)
                 {
-                    return Enum.ToObject(destinationType, (int)value);
+                    return Enum.ToObject(underlyingType, (int)value);
                 }
-
+                
                 throw new InvalidOperationException(String.Format(
-                    CultureInfo.CurrentCulture, "无法将{0}转换为{1}", value.GetType().FullName, destinationType.FullName));
+                    CultureInfo.CurrentCulture, "无法将{0}转换为{1}", value.GetType().FullName, underlyingType.FullName));
             }
 
             try
             {
                 object convertedValue = (canConvertFrom)
                                             ? converter.ConvertFrom(null, culture, value)
-                                            : converter.ConvertTo(null, culture, value, destinationType);
+                                            : converter.ConvertTo(null, culture, value, underlyingType);
                 return convertedValue;
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException(String.Format(
-                    CultureInfo.CurrentCulture, "无法将{0}转换为{1}", value.GetType().FullName, destinationType.FullName), 
-                    ex);
+                if (TypeHelper.TypeAllowsNullValue(destinationType))
+                {
+                    return null;
+                }
+                else
+                {
+                    throw new InvalidOperationException(String.Format(
+                        CultureInfo.CurrentCulture, "无法将{0}转换为{1}", value.GetType().FullName, destinationType.FullName),
+                        ex);
+                }
             }
         }
     }

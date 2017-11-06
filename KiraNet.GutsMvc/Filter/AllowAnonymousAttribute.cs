@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KiraNet.GutsMvc.Filter
+namespace KiraNet.GutsMvc
 {
     [AttributeUsage(
         AttributeTargets.Class |

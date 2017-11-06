@@ -31,7 +31,9 @@ namespace KiraNet.GutsMvc
             set => _users = value ?? new string[0];
         }
 
-        public void OnAuthorization(AuthorizationContext filterContext)
+        public AuthorizeMode AuthorizeMode { get; set; } = AuthorizeMode.And;
+
+        public virtual void OnAuthorization(AuthorizationContext filterContext)
         {
             if (filterContext == null)
             {
@@ -58,7 +60,7 @@ namespace KiraNet.GutsMvc
             }
 
             IPrincipal user = httpContext.User;
-            if (user.Identity == null || !user.Identity.IsAuthenticated)
+            if (user == null || user.Identity == null || !user.Identity.IsAuthenticated)
             {
                 return false;
             }
@@ -68,12 +70,15 @@ namespace KiraNet.GutsMvc
                 return false;
             }
 
-            if (Roles.Length > 0 && !Roles.Any(user.IsInRole))
+            switch (AuthorizeMode)
             {
-                return false;
+                case AuthorizeMode.And:
+                    return Roles.Length == 0 ? true : Roles.All(user.IsInRole);
+                case AuthorizeMode.Or:
+                    return Roles.Length == 0 ? true : Roles.Any(user.IsInRole);
+                default:
+                    return false;
             }
-
-            return true;
         }
     }
 }

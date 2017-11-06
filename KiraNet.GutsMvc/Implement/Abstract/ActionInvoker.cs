@@ -10,7 +10,7 @@ namespace KiraNet.GutsMvc
         void IActionInvoker.InvokeAction(ControllerContext controllerContext)
         {
             IFilterInvoker filterInvoker = controllerContext.HttpContext.Service.GetRequiredService<IFilterInvoker>();
-            filterInvoker.FilterInvoke(controllerContext, InvokeAction);
+            filterInvoker.FilterInvoke(controllerContext, InvokeAction).ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
         async Task IActionInvoker.InvokeActionAsync(ControllerContext controllerContext)
