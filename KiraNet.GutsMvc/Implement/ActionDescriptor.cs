@@ -122,6 +122,11 @@ namespace KiraNet.GutsMvc.Implement
                     paramDescriptors[index].ParameterValue = paramValue;
                     continue;
                 }
+                else if(TypeHelper.IsNullableValueType(modelMetadata.ModelType))
+                {
+                    paramDescriptors[index].ParameterValue = null;
+                    continue;
+                }
                 else
                 {
                     break;
@@ -152,21 +157,14 @@ namespace KiraNet.GutsMvc.Implement
                 ModelMetadata = modelMetadata,
             };
 
-            object paramValue = modelBinder
+            value = modelBinder
                 .BindModel(controller.ControllerContext, bindingContext);
 
-            if (paramValue == null)
+            if (value == null)
             {
-                value = null;
-                if (TypeHelper.TypeAllowsNullValue(modelMetadata.ModelType))
-                {
-                    return true;
-                }
-
                 return false;
             }
 
-            value = paramValue;
             return true;
         }
     }
