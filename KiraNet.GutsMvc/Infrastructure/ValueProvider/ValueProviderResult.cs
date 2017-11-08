@@ -6,110 +6,6 @@ using System.Globalization;
 
 namespace KiraNet.GutsMvc.Infrastructure
 {
-    //public struct ValueProviderResult : IEquatable<ValueProviderResult>, IEnumerable<string>
-    //{
-    //    private static readonly CultureInfo _invariantCulture = CultureInfo.InvariantCulture;
-
-
-    //    public static ValueProviderResult None = new ValueProviderResult(new string[0]);
-
-    //    public ValueProviderResult(StringValues values)
-    //        : this(values, _invariantCulture)
-    //    {
-    //    }
-
-    //    public ValueProviderResult(StringValues values, CultureInfo culture)
-    //    {
-    //        Values = values;
-    //        Culture = culture ?? _invariantCulture;
-    //    }
-
-
-    //    public CultureInfo Culture { get; }
-    //    public StringValues Values { get; }
-
-    //    public string FirstValue
-    //    {
-    //        get
-    //        {
-    //            if (Values.Count == 0)
-    //            {
-    //                return null;
-    //            }
-    //            return Values[0];
-    //        }
-    //    }
-
-    //    public int Length => Values.Count;
-
-    //    public override bool Equals(object obj)
-    //    {
-    //        var other = obj as ValueProviderResult?;
-    //        return other.HasValue && Equals(other.Value);
-    //    }
-
-    //    public bool Equals(ValueProviderResult other)
-    //    {
-    //        if (Length != other.Length)
-    //        {
-    //            return false;
-    //        }
-    //        else
-    //        {
-    //            var x = Values;
-    //            var y = other.Values;
-    //            for (var i = 0; i < x.Count; i++)
-    //            {
-    //                if (!string.Equals(x[i], y[i], StringComparison.Ordinal))
-    //                {
-    //                    return false;
-    //                }
-    //            }
-    //            return true;
-    //        }
-    //    }
-
-    //    public override int GetHashCode()
-    //    {
-    //        return ToString().GetHashCode();
-    //    }
-
-    //    public override string ToString()
-    //    {
-    //        return Values.ToString();
-    //    }
-
-    //    public IEnumerator<string> GetEnumerator()
-    //    {
-    //        return ((IEnumerable<string>)Values).GetEnumerator();
-    //    }
-
-    //    IEnumerator IEnumerable.GetEnumerator()
-    //    {
-    //        return GetEnumerator();
-    //    }
-
-    //    public static explicit operator string(ValueProviderResult result)
-    //    {
-    //        return result.Values;
-    //    }
-
-    //    public static explicit operator string[] (ValueProviderResult result)
-    //    {
-    //        return result.Values;
-    //    }
-
-    //    public static bool operator ==(ValueProviderResult x, ValueProviderResult y)
-    //    {
-    //        return x.Equals(y);
-    //    }
-
-    //    public static bool operator !=(ValueProviderResult x, ValueProviderResult y)
-    //    {
-    //        return !x.Equals(y);
-    //    }
-    //}
-
     [Serializable]
     public class ValueProviderResult
     {
@@ -256,6 +152,7 @@ namespace KiraNet.GutsMvc.Infrastructure
                     }
                     catch
                     {
+                        return null;
                     }
                 }
             }

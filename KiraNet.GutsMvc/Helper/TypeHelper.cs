@@ -5,6 +5,11 @@ namespace KiraNet.GutsMvc.Helper
 {
     internal static class TypeHelper
     {
+        /// <summary>
+        /// 判断目标类型的实例是否可为空
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static bool TypeAllowsNullValue(Type type)
         {
             return (!type.IsValueType || Nullable.GetUnderlyingType(type) != null);
@@ -84,19 +89,24 @@ namespace KiraNet.GutsMvc.Helper
             return false;
         }
 
-        public static string GetTypeName(Type type)
+        /// <summary>
+        /// 获取指定类型的C#类型名称
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static string GetCSharpTypeName(Type type)
         {
             if (type.IsGenericType)
             {
                 var typeName = type.GetGenericTypeDefinition().FullName;
                 typeName = typeName.Substring(0, typeName.IndexOf('`')) + '<';
                 var generTypes = type.GetGenericArguments();
-                typeName = typeName + GetTypeName(generTypes[0]);
+                typeName = typeName + GetCSharpTypeName(generTypes[0]);
                 if (generTypes.Length > 1)
                 {
                     for (int i = 1; i < generTypes.Length; i++)
                     {
-                        typeName = typeName + ',' + GetTypeName(generTypes[i]);
+                        typeName = typeName + ',' + GetCSharpTypeName(generTypes[i]);
                     }
                 }
 

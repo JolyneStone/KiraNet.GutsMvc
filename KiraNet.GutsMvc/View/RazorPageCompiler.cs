@@ -15,7 +15,7 @@ namespace KiraNet.GutsMvc.View
             var baseTypeName = "KiraNet.GutsMvc.View.RazorPageViewBase";
             if (modelType != null)
             {
-                baseTypeName = $"{baseTypeName}<{TypeHelper.GetTypeName(modelType)}>";
+                baseTypeName = $"{baseTypeName}<{TypeHelper.GetCSharpTypeName(modelType)}>";
             }
 
             var className = String.Empty;

@@ -30,22 +30,6 @@ namespace KiraNet.GutsMvc
                 return;
             }
 
-            //IStaticFileProvider fileProvider = new StaticFileProvider();
-            //if (!fileProvider.TryGetFileStream(path, out var content))
-            //{
-            //    httpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
-            //    httpContext.IsCancel = true;
-            //    return;
-            //}
-
-            //using (var writer = new StreamWriter(httpContext.Response.ResponseStream, Encoding.UTF8))
-            //{
-            //    writer.Write(content);
-            //    httpContext.Response.StatusCode = (int)HttpStatusCode.Found;
-            //    httpContext.Response.ContentType = GetContentType(path);
-            //    //httpContext.Response.ResponseStream.Close();
-            //}
-
             if(!File.Exists(path))
             {
                 httpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;

@@ -158,6 +158,11 @@ namespace KiraNet.GutsMvc.Implement
             if (paramValue == null)
             {
                 value = null;
+                if (TypeHelper.TypeAllowsNullValue(modelMetadata.ModelType))
+                {
+                    return true;
+                }
+
                 return false;
             }
 
