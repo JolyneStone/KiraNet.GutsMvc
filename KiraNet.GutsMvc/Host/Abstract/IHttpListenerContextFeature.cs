@@ -4,5 +4,6 @@
     {
         IHttpRequestFeature RequestFeature { get; }
         IHttpResponseFeature ResponseFeature { get; }
+        IWebSocketFeature WebSocketFeature { get; }
     }
 }

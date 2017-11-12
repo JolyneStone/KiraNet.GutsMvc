@@ -1,6 +1,5 @@
 ﻿using KiraNet.GutsMvc.Route;
 using System;
-using System.Security.Claims;
 using System.Security.Principal;
 
 namespace KiraNet.GutsMvc
@@ -12,6 +11,7 @@ namespace KiraNet.GutsMvc
     public abstract class HttpContext
     {
         public abstract IFeatureCollection HttpContextFeatures { get; }
+        public abstract IWebSocketFeature WebStocket { get; internal set; }
         public abstract HttpRequest Request { get; internal set; }
         public abstract HttpResponse Response { get; internal set; }
         public abstract RouteContext Route { get; internal set; }

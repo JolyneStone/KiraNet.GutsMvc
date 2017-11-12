@@ -127,6 +127,13 @@ namespace KiraNet.GutsMvc.Implement
                     continue;
                 }
 
+                // 判断是否为WebStock连接请求
+                if(IsWebSocket(context.HttpContext.Request, method))
+                {
+                    yield return new ActionDescriptor { Action = method, ActionName = method.Name.ToLower(), Services = Services };
+                }
+
+
                 if (!Enum.TryParse<HttpMethod>(context.HttpContext.Request.HttpMethod.ToUpper(), out var routeMethod))
                 {
                     routeMethod = HttpMethod.GET;
@@ -152,6 +159,26 @@ namespace KiraNet.GutsMvc.Implement
 
                 continue;
             }
+        }
+
+        private bool IsWebSocket(HttpRequest request, MethodInfo method)
+        {
+            if (request == null)
+            {
+                return false;
+            }
+
+            if (method == null)
+            {
+                return false;
+            }
+
+            if (!request.IsWebSocketRequest)
+            {
+                return false;
+            }
+
+            return method.IsDefined(typeof(WebSocketAttribute), true);
         }
     }
 }

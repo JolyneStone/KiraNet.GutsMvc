@@ -1,4 +1,7 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
+using System.Net.WebSockets;
+using System.Threading.Tasks;
 
 namespace KiraNet.GutsMvc
 {
@@ -15,6 +18,7 @@ namespace KiraNet.GutsMvc
             this._context = context;
             RequestFeature = new HttpRequestFeature(context.Request, listener);
             ResponseFeature = new HttpResponseFeature(context.Response, listener);
+            WebSocketFeature = new WebSocketFeature(context.AcceptWebSocketAsync);
             //Url = context.Request.Url;
             //ResponseStream = context.Response.OutputStream;
             //PathBase = (from it in listener.Prefixes
@@ -43,6 +47,8 @@ namespace KiraNet.GutsMvc
         public IHttpRequestFeature RequestFeature { get; }
 
         public IHttpResponseFeature ResponseFeature { get; }
+
+        public IWebSocketFeature WebSocketFeature { get; set; }
     }
 }
 

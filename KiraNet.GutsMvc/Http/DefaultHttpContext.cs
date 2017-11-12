@@ -2,7 +2,6 @@
 using KiraNet.GutsMvc.Route;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Security.Claims;
 using System.Security.Principal;
 
 namespace KiraNet.GutsMvc
@@ -18,6 +17,7 @@ namespace KiraNet.GutsMvc
         /// 该属性是由服务器创建的用于封装原始HTTP上下文相关特性的对象
         /// </summary>
         public override IFeatureCollection HttpContextFeatures { get; }
+        public override IWebSocketFeature WebStocket { get; internal set; }
         public override HttpRequest Request { get; internal set; }
         public override HttpResponse Response { get; internal set; }
         public override RouteContext Route { get; internal set; }
@@ -28,10 +28,11 @@ namespace KiraNet.GutsMvc
         {
             //this._features = new FeatureReferences<FeatureInterfaces>(httpContextFeatures);
             this.HttpContextFeatures = httpContextFeatures;
+            this.WebStocket = httpContextFeatures.Get<IWebSocketFeature>();
             this.Request = new DefaultHttpRequest(this);
             this.Response = new DefaultHttpResponse(this);
             this.ServiceRoot = service; // 这里的ServiceProvider和WebHost不是同一个实例，但同样是根ServiceProvider
-            this.Service = this.Service != null ? this.Service : serviceScope;
+            this.Service = Service ?? serviceScope;
             this.BuilderSessionManager();
 
             Route = new RouteContext(this);

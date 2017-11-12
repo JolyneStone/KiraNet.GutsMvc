@@ -2,6 +2,7 @@
 using KiraNet.GutsMvc.Helper;
 using KiraNet.GutsMvc.Implement;
 using KiraNet.GutsMvc.Infrastructure;
+using KiraNet.GutsMvc.Infrastructure.ActionResult;
 using KiraNet.GutsMvc.ModelValid;
 using KiraNet.GutsMvc.Route;
 using System;
@@ -273,6 +274,19 @@ namespace KiraNet.GutsMvc
         protected virtual HttpUnauthorizedResult HttpUnauthorizedResult(string statusDescription = null)
         {
             return new HttpUnauthorizedResult() { StatusDescription = statusDescription };
+        }
+
+        protected virtual WebSocketResult WebSocket()
+        {
+            return new WebSocketResult();
+        }
+
+        protected virtual WebSocketResult WebSocket(HttpStatusCode statusCode)
+        {
+            return new WebSocketResult
+            {
+                HttpStatusCode = statusCode
+            };
         }
 
         protected virtual HttpStatusCodeResult HttpStatusCode(HttpStatusCode statusCode, string statusDescription = null)
