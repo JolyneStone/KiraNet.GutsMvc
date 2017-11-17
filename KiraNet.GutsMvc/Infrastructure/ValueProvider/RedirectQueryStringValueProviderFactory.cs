@@ -5,19 +5,19 @@ namespace KiraNet.GutsMvc.Infrastructure
 {
     public class RedirectQueryStringValueProviderFactory : IValueProviderFactory
     {
-        public IValueProvider CreateValueProvider(ControllerContext controllerContext)
+        public IValueProvider CreateValueProvider(HttpContext httpContext)
         {
-            if (controllerContext == null)
+            if (httpContext == null)
             {
-                throw new ArgumentNullException(nameof(controllerContext));
+                throw new ArgumentNullException(nameof(httpContext));
             }
 
-            if (controllerContext.HttpContext.Request.RedirectQueryString == null)
+            if (httpContext.Request.RedirectQueryString == null)
             {
                 return null;
             }
 
-            return new RedirectQueryStringValueProvider(controllerContext);
+            return new RedirectQueryStringValueProvider(httpContext);
         }
     }
 }

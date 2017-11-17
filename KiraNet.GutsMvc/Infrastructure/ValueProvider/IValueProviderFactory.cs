@@ -8,6 +8,6 @@ namespace KiraNet.GutsMvc.Infrastructure
     /// </summary>
     public interface IValueProviderFactory
     {
-        IValueProvider CreateValueProvider(ControllerContext controllerContext);
+        IValueProvider CreateValueProvider(HttpContext httpContext);
     }
 }

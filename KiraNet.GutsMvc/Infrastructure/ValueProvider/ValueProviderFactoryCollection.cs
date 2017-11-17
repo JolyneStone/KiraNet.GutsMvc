@@ -14,13 +14,13 @@ namespace KiraNet.GutsMvc.Infrastructure
         {
         }
 
-        public IValueProvider GetValueProvider(ControllerContext controllerContext)
+        public IValueProvider GetValueProvider(HttpContext httpContext)
         {
 
             List<IValueProvider> providers = new List<IValueProvider>(this.Count);
             foreach (IValueProviderFactory factory in this)
             {
-                IValueProvider provider = factory.CreateValueProvider(controllerContext);
+                IValueProvider provider = factory.CreateValueProvider(httpContext);
                 if (provider != null)
                 {
                     providers.Add(provider);

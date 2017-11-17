@@ -5,21 +5,21 @@ namespace KiraNet.GutsMvc.Infrastructure
 {
     public sealed class FormValueProviderFactory : IValueProviderFactory
     {
-        public IValueProvider CreateValueProvider(ControllerContext controllerContext)
+        public IValueProvider CreateValueProvider(HttpContext httpContext)
         {
-            if (controllerContext == null)
+            if (httpContext == null)
             {
-                throw new ArgumentNullException(nameof(controllerContext));
+                throw new ArgumentNullException(nameof(httpContext));
             }
 
             try
             {
-                if(controllerContext.HttpContext.Request.Form == null)
+                if(httpContext.Request.Form == null)
                 {
                     return null;
                 }
 
-                return new FormValueProvider(controllerContext.HttpContext.Request.Form);
+                return new FormValueProvider(httpContext.Request.Form);
             }
             catch
             {

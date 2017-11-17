@@ -1,4 +1,6 @@
-﻿using KiraNet.GutsMvc.Implement;
+﻿using KiraNet.GutsMvc.WebSocketHub;
+using KiraNet.GutsMvc.Implement;
+using KiraNet.GutsMvc.MiddlewareHandler;
 using KiraNet.GutsMvc.Route;
 using KiraNet.GutsMvc.View;
 using System;
@@ -47,6 +49,12 @@ namespace KiraNet.GutsMvc
             return app.Use(middleware);
         }
 
+        /// <summary>
+        /// 注册GutsMvc中间件
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="routeConfiguration"></param>
+        /// <returns></returns>
         public static IApplicationBuilder UseGutsMvc(this IApplicationBuilder app, Action<RouteConfiguration> routeConfiguration)
         {
             if (routeConfiguration == null)
@@ -64,6 +72,25 @@ namespace KiraNet.GutsMvc
             }
 
             return app.Use(new MvcMiddlewareHandler());
+        }
+
+        /// <summary>
+        /// 注册针对WebSocket处理的中间件
+        /// 注：最好将此方法在UserGutsMvc()方法之前调用
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="hubConfiguration"></param>
+        /// <returns></returns>
+        public static IApplicationBuilder UserWebSocketHub(this IApplicationBuilder app, Action<HubMap> hubConfiguration)
+        {
+            if (hubConfiguration == null)
+            {
+                throw new ArgumentNullException(nameof(hubConfiguration));
+            }
+
+            hubConfiguration(HubMap.Map);
+
+            return app.Use(new WebSocketHubHandler());
         }
 
         public static IApplicationBuilder ConfigureView(this IApplicationBuilder app, string viewPath)

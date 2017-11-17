@@ -82,17 +82,6 @@ namespace KiraNet.GutsMvc
                      .Set<IHttpResponseFeature>(feature.ResponseFeature)
                      .Set<IWebSocketFeature>(feature.WebSocketFeature);
 
-                 //TContext context = application.CreateContext(contextFeatures);
-
-                 //application.ProcessRequestAsync(context)
-                 //    .ContinueWith(_ =>
-                 //    {
-                 //        httpListenerContext.Request.InputStream.Close();
-                 //        httpListenerContext.Response.OutputStream.Close();
-                 //        httpListenerContext.Response.Close();
-                 //        application.DisposeContext(context, _.Exception);
-                 //    });
-
                  TContext context = application.CreateContext(contextFeatures);
 
                  //await application.ProcessRequestAsync(context).ConfigureAwait(false).GetAwaiter().GetResult();

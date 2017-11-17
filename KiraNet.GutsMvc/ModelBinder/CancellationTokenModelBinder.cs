@@ -5,7 +5,7 @@ namespace KiraNet.GutsMvc.ModelBinder
 {
     public class CancellationTokenModelBinder : IModelBinder
     {
-        public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
+        public object BindModel(HttpContext controllerContext, ModelBindingContext bindingContext)
         {
             return new CancellationToken();
         }

@@ -2,7 +2,6 @@
 using KiraNet.GutsMvc.Helper;
 using KiraNet.GutsMvc.Implement;
 using KiraNet.GutsMvc.Infrastructure;
-using KiraNet.GutsMvc.Infrastructure.ActionResult;
 using KiraNet.GutsMvc.ModelValid;
 using KiraNet.GutsMvc.Route;
 using System;
@@ -25,7 +24,7 @@ namespace KiraNet.GutsMvc
         IActionFilter,
         IResultFilter
     {
-        private IValueProvider _valueProvider;
+        //private IValueProvider _valueProvider;
         private ControllerContext _controllerContext;
         private ViewDataDictionary _viewDataDictionary;
         private TempDataDictionary _tempDataDictionary;
@@ -118,23 +117,23 @@ namespace KiraNet.GutsMvc
             }
         }
 
-        public IValueProvider ValueProvider
-        {
-            get
-            {
-                if (_valueProvider == null)
-                {
-                    _valueProvider = ValueProviderFactories.Factories.GetValueProvider(ControllerContext);
-                }
+        //public IValueProvider ValueProvider
+        //{
+        //    get
+        //    {
+        //        if (_valueProvider == null)
+        //        {
+        //            _valueProvider = ValueProviderFactories.Factories.GetValueProvider(HttpContext);
+        //        }
 
-                return _valueProvider;
-            }
+        //        return _valueProvider;
+        //    }
 
-            set
-            {
-                _valueProvider = value;
-            }
-        }
+        //    set
+        //    {
+        //        _valueProvider = value;
+        //    }
+        //}
 
         /// <summary>
         /// 获取将执行的Action方法，并为之绑定参数
@@ -142,11 +141,6 @@ namespace KiraNet.GutsMvc
         /// </summary>
         internal virtual async Task Execute()
         {
-            if (_valueProvider == null)
-            {
-                _valueProvider = ValueProviderFactories.Factories.GetValueProvider(ControllerContext);
-            }
-
             ControllerContext.ActionDescriptor = ControllerContext.ControllerDescriptor.BindingAction(this);
             if (ControllerContext.ActionDescriptor == null)
             {
@@ -276,19 +270,6 @@ namespace KiraNet.GutsMvc
             return new HttpUnauthorizedResult() { StatusDescription = statusDescription };
         }
 
-        protected virtual WebSocketResult WebSocket()
-        {
-            return new WebSocketResult();
-        }
-
-        protected virtual WebSocketResult WebSocket(HttpStatusCode statusCode)
-        {
-            return new WebSocketResult
-            {
-                HttpStatusCode = statusCode
-            };
-        }
-
         protected virtual HttpStatusCodeResult HttpStatusCode(HttpStatusCode statusCode, string statusDescription = null)
         {
             return HttpStatusCode((int)statusCode, statusDescription);
@@ -309,6 +290,24 @@ namespace KiraNet.GutsMvc
             {
                 Data = data,
                 ContentType = contentType
+            };
+        }
+
+        protected virtual ViewResult View(Type modelType, string model = null, string folderName = null, string viewName = null)
+        {
+            ControllerContext.ModelType = modelType ?? ControllerContext.ModelType;
+            ViewData.ModelType = modelType ?? ControllerContext.ModelType;
+            ViewData.Model = model;
+
+            viewName = String.IsNullOrWhiteSpace(viewName) ? ControllerContext.ActionDescriptor.ActionName : viewName;
+            folderName = String.IsNullOrWhiteSpace(folderName) ? ControllerContext.ControllerDescriptor.ControllerName : folderName;
+
+            return new ViewResult
+            {
+                FolderName = folderName,
+                ViewName = viewName,
+                Model = model,
+                ModelType = modelType
             };
         }
 

@@ -1,15 +1,13 @@
-﻿using KiraNet.GutsMvc.Implement;
-
-namespace KiraNet.GutsMvc.ModelBinder
+﻿namespace KiraNet.GutsMvc.ModelBinder
 {
     public class ServiceModelBinder : IModelBinder
     {
-        public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
+        public object BindModel(HttpContext httpContext, ModelBindingContext bindingContext)
         {
             object service;
             try
             {
-                service = controllerContext.HttpContext.Service.GetService(bindingContext.ModelType);
+                service = httpContext.Service.GetService(bindingContext.ModelType);
             }
             catch
             {

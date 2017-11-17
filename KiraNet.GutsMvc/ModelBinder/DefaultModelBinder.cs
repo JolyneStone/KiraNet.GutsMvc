@@ -1,18 +1,17 @@
 ﻿using KiraNet.GutsMvc.Helper;
-using KiraNet.GutsMvc.Implement;
 using KiraNet.GutsMvc.Infrastructure;
 using KiraNet.GutsMvc.Metadata;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace KiraNet.GutsMvc.ModelBinder
 {
-    public class OrdinaryModelBinder : IModelBinder
+    public class DefaultModelBinder : IModelBinder
     {
         private IModelBinderProvider _binders;
         private IModelMetadataProvider _metadataProvider;
@@ -53,17 +52,17 @@ namespace KiraNet.GutsMvc.ModelBinder
 
         private readonly IServiceProvider _services;
 
-        public OrdinaryModelBinder(IServiceProvider services)
+        public DefaultModelBinder(IServiceProvider services)
         {
             _services = services;
         }
 
 
-        public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
+        public object BindModel(HttpContext httpContext, ModelBindingContext bindingContext)
         {
-            if (controllerContext == null)
+            if (httpContext == null)
             {
-                throw new ArgumentNullException(nameof(controllerContext));
+                throw new ArgumentNullException(nameof(httpContext));
             }
 
             if (bindingContext == null)
@@ -80,20 +79,20 @@ namespace KiraNet.GutsMvc.ModelBinder
 
             if (bindingContext.ModelMetadata.IsComplexType)
             {
-                return BindComplexModel(controllerContext, bindingContext);
+                return BindComplexModel(httpContext, bindingContext);
             }
             else
             {
                 var valueProviderResult = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
                 if (valueProviderResult != null)
-                    return BindSimpleModel(controllerContext, bindingContext, valueProviderResult);
+                    return BindSimpleModel(httpContext, bindingContext, valueProviderResult);
 
                 return null;
             }
         }
 
 
-        private object BindComplexModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
+        private object BindComplexModel(HttpContext httpContext, ModelBindingContext bindingContext)
         {
             if (bindingContext.Model != null &&
                 bindingContext.ModelType.IsInstanceOfType(bindingContext.Model))
@@ -104,12 +103,12 @@ namespace KiraNet.GutsMvc.ModelBinder
 
             if (TypeHelper.IsMatch(bindingContext.ModelType, typeof(IDictionary<,>)))
             {
-                return BindDictionary(controllerContext, bindingContext);
+                return BindDictionary(httpContext, bindingContext);
             }
 
             if (TypeHelper.IsMatch(bindingContext.ModelType, typeof(IEnumerable<>)))
             {
-                return BindCollection(controllerContext, bindingContext);
+                return BindCollection(httpContext, bindingContext);
             }
 
             var model = bindingContext.Model;
@@ -117,7 +116,7 @@ namespace KiraNet.GutsMvc.ModelBinder
             var valueProviderResult = bindingContext.ValueProvider;
 
             // 我们先创建一个空的Model对象，并将引用赋给元数据的Model
-            model = CreateModel(controllerContext, bindingContext, modelType);
+            model = CreateModel(httpContext, bindingContext, modelType);
             bindingContext.ModelMetadata.Model = model;
 
 
@@ -125,13 +124,13 @@ namespace KiraNet.GutsMvc.ModelBinder
             foreach (var propertyDescriptor in propertyDescriptors)
             {
                 // 调用BindProperty方法为相应的属性赋值
-                BindingProperty(controllerContext, bindingContext, propertyDescriptor);
+                BindingProperty(httpContext, bindingContext, propertyDescriptor);
             }
 
             return model;
         }
 
-        private void BindingProperty(ControllerContext controllerContext, ModelBindingContext bindingContext, PropertyDescriptor property)
+        private void BindingProperty(HttpContext httpContext, ModelBindingContext bindingContext, PropertyDescriptor property)
         {
             // 将属性名添加到现有前缀上
             string prefix = $"{bindingContext.ModelName ?? ""}.{property.Name ?? ""}".Trim('.');
@@ -146,7 +145,7 @@ namespace KiraNet.GutsMvc.ModelBinder
 
             // 针对属性实施Model绑定并对属性赋值
             // 注意BindModel方法的调用，复杂类型的递归调用就来自于这里
-            object propertyValue = Binders.GetBinder(property.PropertyType).BindModel(controllerContext, context);
+            object propertyValue = Binders.GetBinder(property.PropertyType).BindModel(httpContext, context);
 
             if (bindingContext.ModelMetadata.ConvertEmptyStringToNull &&
                 Object.Equals(propertyValue, String.Empty))
@@ -158,7 +157,7 @@ namespace KiraNet.GutsMvc.ModelBinder
             property.SetValue(bindingContext.Model, propertyValue);
         }
 
-        private object BindCollection(ControllerContext controllerContext, ModelBindingContext bindingContext)
+        private object BindCollection(HttpContext httpContext, ModelBindingContext bindingContext)
         {
             Type modelType = bindingContext.ModelType;
             Type elementType;
@@ -181,7 +180,7 @@ namespace KiraNet.GutsMvc.ModelBinder
                 .MakeGenericType(elementType) : modelType;
 
             // 调用CreateModel方法创建一个空的集合对象，之后将去填充它
-            object model = CreateModel(controllerContext, bindingContext, collectionType);
+            object model = CreateModel(httpContext, bindingContext, collectionType);
             bindingContext.ModelMetadata.Model = model;
 
             // 针对每个索引实施Model绑定，并将绑定生成的元素添加到集合之中
@@ -209,7 +208,7 @@ namespace KiraNet.GutsMvc.ModelBinder
                 };
 
                 object element = Binders.GetBinder(elementType)
-                    .BindModel(controllerContext, context);
+                    .BindModel(httpContext, context);
 
                 elements.Add(element);
             }
@@ -233,13 +232,13 @@ namespace KiraNet.GutsMvc.ModelBinder
             return model;
         }
 
-        private object BindDictionary(ControllerContext controllerContext, ModelBindingContext bindingContext)
+        private object BindDictionary(HttpContext httpContext, ModelBindingContext bindingContext)
         {
             Type modelType = bindingContext.ModelType;
             Type[] argumentTypes = modelType.GetGenericArguments();
             Type keyType = argumentTypes[0];
             Type valueType = argumentTypes[1];
-            object model = CreateModel(controllerContext, bindingContext, modelType);
+            object model = CreateModel(httpContext, bindingContext, modelType);
 
             List<KeyValuePair<object, object>> list = new List<KeyValuePair<object, object>>();
             var isZeroBased = GetIndexes(bindingContext, out var indexes);
@@ -270,9 +269,9 @@ namespace KiraNet.GutsMvc.ModelBinder
                 };
 
                 object key = Binders.GetBinder(keyType)
-                    .BindModel(controllerContext, contextForKey);
+                    .BindModel(httpContext, contextForKey);
                 object value = Binders.GetBinder(valueType)
-                    .BindModel(controllerContext, contextForValue);
+                    .BindModel(httpContext, contextForValue);
                 list.Add(new KeyValuePair<object, object>(key, value));
             }
 
@@ -316,7 +315,7 @@ namespace KiraNet.GutsMvc.ModelBinder
                 index++;
             }
         }
-        private static object BindSimpleModel(ControllerContext controllerContext, ModelBindingContext bindingContext, ValueProviderResult result)
+        private static object BindSimpleModel(HttpContext httpContext, ModelBindingContext bindingContext, ValueProviderResult result)
         {
             if (bindingContext.ModelType.IsInstanceOfType(result.RawValue))
             {
@@ -334,7 +333,7 @@ namespace KiraNet.GutsMvc.ModelBinder
                     // ModelType是一个集合而不是数组
                     // 我们先构造出数组再填充到所对应的集合中
 
-                    object modelCollection = CreateModel(controllerContext, bindingContext, bindingContext.ModelType);
+                    object modelCollection = CreateModel(httpContext, bindingContext, bindingContext.ModelType);
 
                     var elementType = enumerableType.GetGenericArguments()[0]; // 得到泛型参数类型
                     var arrayType = elementType.MakeArrayType(); // 构造出泛型参数类型的所对应的数组
@@ -366,7 +365,7 @@ namespace KiraNet.GutsMvc.ModelBinder
             }
         }
 
-        private static object CreateModel(ControllerContext controllerContext, ModelBindingContext bindingContext, Type modelType)
+        private static object CreateModel(HttpContext httpContext, ModelBindingContext bindingContext, Type modelType)
         {
             var targetType = modelType;
 
@@ -398,7 +397,7 @@ namespace KiraNet.GutsMvc.ModelBinder
 
         private static void ReplaceCollection(Type collectionType, object collection, object source)
         {
-            typeof(OrdinaryModelBinder)
+            typeof(DefaultModelBinder)
                 .GetMethod("CopyCollection", BindingFlags.Static | BindingFlags.NonPublic)
                 .MakeGenericMethod(collectionType)
                 .Invoke(null, new object[] { collection, source });
@@ -418,7 +417,7 @@ namespace KiraNet.GutsMvc.ModelBinder
 
         private static void ReplaceDictionary(Type keyType, Type valueType, object destination, IEnumerable<KeyValuePair<object, object>> source)
         {
-            typeof(OrdinaryModelBinder).GetMethod("CopyDictionary", BindingFlags.Static | BindingFlags.NonPublic)
+            typeof(DefaultModelBinder).GetMethod("CopyDictionary", BindingFlags.Static | BindingFlags.NonPublic)
                 .MakeGenericMethod(keyType, valueType)
                 .Invoke(null, new object[] { destination, source });
         }
@@ -461,9 +460,13 @@ namespace KiraNet.GutsMvc.ModelBinder
             }
         }
 
-        private static object GetPropertyValue(ControllerContext controllerContext, ModelBindingContext bindingContext, PropertyDescriptor propertyDescriptor, IModelBinder propertyBinder)
+        private static object GetPropertyValue(
+            HttpContext httpContext,
+            ModelBindingContext bindingContext,
+            PropertyDescriptor propertyDescriptor,
+            IModelBinder propertyBinder)
         {
-            object value = propertyBinder.BindModel(controllerContext, bindingContext);
+            object value = propertyBinder.BindModel(httpContext, bindingContext);
 
             if (bindingContext.ModelMetadata.ConvertEmptyStringToNull && Equals(value, String.Empty))
             {

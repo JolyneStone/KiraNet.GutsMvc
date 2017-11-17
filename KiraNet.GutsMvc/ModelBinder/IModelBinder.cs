@@ -1,9 +1,7 @@
-﻿using KiraNet.GutsMvc.Implement;
-
-namespace KiraNet.GutsMvc.ModelBinder
+﻿namespace KiraNet.GutsMvc.ModelBinder
 {
     public interface IModelBinder
     {
-        object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext);
+        object BindModel(HttpContext httpContext, ModelBindingContext bindingContext);
     }
 }

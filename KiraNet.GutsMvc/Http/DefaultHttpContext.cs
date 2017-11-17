@@ -37,7 +37,7 @@ namespace KiraNet.GutsMvc
 
             Route = new RouteContext(this);
             //RouteData = Request.RouteData;
-            RouteEntity = Route.Route.GetRouteEntity(RouteConfiguration.RouteConfig, Request.RawUrl.ToString());
+            RouteEntity = Route.Route.GetRouteEntity(RouteConfiguration.RouteConfig, Request.RawUrl);
         }
 
         private IPrincipal _user;

@@ -1,26 +1,25 @@
-﻿using KiraNet.GutsMvc.Implement;
-using System;
+﻿using System;
 
 namespace KiraNet.GutsMvc.Infrastructure
 {
     public sealed class FileCollectionValueProviderFactory : IValueProviderFactory
     {
-        public IValueProvider CreateValueProvider(ControllerContext controllerContext)
+        public IValueProvider CreateValueProvider(HttpContext httpContext)
         {
-            if(controllerContext == null)
+            if(httpContext == null)
             {
-                throw new ArgumentNullException(nameof(controllerContext));
+                throw new ArgumentNullException(nameof(httpContext));
             }
 
             try
             {
-                if(controllerContext.HttpContext.Request.Form==null ||
-                    controllerContext.HttpContext.Request.Form.Files==null)
+                if(httpContext.Request.Form==null ||
+                    httpContext.Request.Form.Files==null)
                 {
                     return null;
                 }
 
-                return new FileCollectionValueProvider(controllerContext.HttpContext.Request.Form.Files);
+                return new FileCollectionValueProvider(httpContext.Request.Form.Files);
             }
             catch
             {

@@ -5,7 +5,7 @@ namespace KiraNet.GutsMvc.Infrastructure
 {
     public sealed class QueryStringValueProvider : NameValueCollectionValueProvider
     {
-        public QueryStringValueProvider(ControllerContext context) : base(context.HttpContext.Request.QueryString, CultureInfo.CurrentCulture)
+        public QueryStringValueProvider(HttpContext context) : base(context.Request.QueryString, CultureInfo.CurrentCulture)
         {
         }
     }

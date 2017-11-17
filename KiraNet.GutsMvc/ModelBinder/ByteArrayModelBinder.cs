@@ -1,5 +1,4 @@
-﻿using KiraNet.GutsMvc.Implement;
-using KiraNet.GutsMvc.Infrastructure;
+﻿using KiraNet.GutsMvc.Infrastructure;
 using System;
 
 namespace KiraNet.GutsMvc.ModelBinder
@@ -9,7 +8,7 @@ namespace KiraNet.GutsMvc.ModelBinder
     /// </summary>
     public class ByteArrayModelBinder : IModelBinder
     {
-        public virtual object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
+        public virtual object BindModel(HttpContext httpContext, ModelBindingContext bindingContext)
         {
             ValueProviderResult result = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
             string attemptedValue = result.StrRawValue;

@@ -1,13 +1,12 @@
-﻿using KiraNet.GutsMvc.Implement;
-using System;
+﻿using System;
 
 namespace KiraNet.GutsMvc.ModelBinder
 {
     public class FileModelBinder : IModelBinder
     {
-        public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
+        public object BindModel(HttpContext httpContext, ModelBindingContext bindingContext)
         {
-            var file = controllerContext.HttpContext.Request.Form.Files.GetFile(bindingContext.ModelName);
+            var file = httpContext.Request.Form.Files.GetFile(bindingContext.ModelName);
 
             if (file == null ||
                 (file.Length == 0 &&

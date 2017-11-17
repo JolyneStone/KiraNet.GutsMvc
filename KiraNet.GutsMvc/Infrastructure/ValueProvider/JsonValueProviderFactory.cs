@@ -1,5 +1,4 @@
-﻿using KiraNet.GutsMvc.Implement;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,16 +12,16 @@ namespace KiraNet.GutsMvc.Infrastructure
     /// </summary>
     public sealed class JsonValueProviderFactory : IValueProviderFactory
     {
-        public IValueProvider CreateValueProvider(ControllerContext controllerContext)
+        public IValueProvider CreateValueProvider(HttpContext httpContext)
         {
-            if (controllerContext == null)
+            if (httpContext == null)
             {
                 throw new ArgumentNullException("controllerContext");
             }
 
             try
             {
-                object jsonData = GetDeserializedObject(controllerContext);
+                object jsonData = GetDeserializedObject(httpContext);
                 if (jsonData == null)
                 {
                     return null;
@@ -70,15 +69,15 @@ namespace KiraNet.GutsMvc.Infrastructure
             backingStore.Add(prefix, value);
         }
 
-        private static object GetDeserializedObject(ControllerContext controllerContext)
+        private static object GetDeserializedObject(HttpContext httpContext)
         {
-            if (!controllerContext.HttpContext.Request.ContentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
+            if (!httpContext.Request.ContentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
             {
                 // 非JSON请求
                 return null;
             }
 
-            StreamReader reader = new StreamReader(controllerContext.HttpContext.Request.RequestStream);
+            StreamReader reader = new StreamReader(httpContext.Request.RequestStream);
             string bodyText = reader.ReadToEnd();
             if (String.IsNullOrEmpty(bodyText))
             {

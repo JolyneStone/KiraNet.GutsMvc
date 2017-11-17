@@ -5,18 +5,18 @@ namespace KiraNet.GutsMvc.Infrastructure
 {
     public sealed class QueryStringValueProviderFactory : IValueProviderFactory
     {
-        public IValueProvider CreateValueProvider(ControllerContext controllerContext)
+        public IValueProvider CreateValueProvider(HttpContext httpContext)
         {
-            if (controllerContext == null)
+            if (httpContext == null)
             {
-                throw new ArgumentNullException(nameof(controllerContext));
+                throw new ArgumentNullException(nameof(httpContext));
             }
 
-            if (controllerContext.HttpContext.Request.QueryString == null)
+            if (httpContext.Request.QueryString == null)
             {
                 return null;
             }
-            return new QueryStringValueProvider(controllerContext);
+            return new QueryStringValueProvider(httpContext);
         }
     }
 }

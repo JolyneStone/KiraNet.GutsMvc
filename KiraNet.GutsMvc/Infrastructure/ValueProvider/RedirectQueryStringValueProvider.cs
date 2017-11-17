@@ -5,7 +5,7 @@ namespace KiraNet.GutsMvc.Infrastructure
 {
     public class RedirectQueryStringValueProvider : NameValueCollectionValueProvider
     {
-        public RedirectQueryStringValueProvider(ControllerContext context) : base(context.HttpContext.Request.RedirectQueryString, CultureInfo.CurrentCulture)
+        public RedirectQueryStringValueProvider(HttpContext context) : base(context.Request.RedirectQueryString, CultureInfo.CurrentCulture)
         {
         }
     }

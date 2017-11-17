@@ -1,4 +1,5 @@
 ﻿using KiraNet.GutsMvc.Filter;
+using KiraNet.GutsMvc.WebSocketHub;
 using KiraNet.GutsMvc.Metadata;
 using KiraNet.GutsMvc.ModelBinder;
 using KiraNet.GutsMvc.ModelValid;
@@ -12,6 +13,11 @@ namespace KiraNet.GutsMvc
 {
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// 提供对GutsMvc中间件的支持
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public static IServiceCollection AddGutsMvc(this IServiceCollection services)
         {
             return services
@@ -25,7 +31,7 @@ namespace KiraNet.GutsMvc
                     {typeof(IFormFile), new FileModelBinder() },
                     {typeof(byte[]), new ByteArrayModelBinder() },
                     {typeof(CancellationToken), new CancellationTokenModelBinder() },
-                    {typeof(IModelBinder), new OrdinaryModelBinder(_) },
+                    {typeof(IModelBinder), new DefaultModelBinder(_) },
                     {typeof(IServiceProvider), new ServiceModelBinder() }
                 })
                 .AddSingleton<IFilterProvider, FilterProviderCollection>(_ => new FilterProviderCollection
@@ -39,6 +45,22 @@ namespace KiraNet.GutsMvc
                 .AddSingleton<IFilterInvoker, FilterInvoker>();
         }
 
+        /// <summary>
+        /// 提供对WebSocketHub中间件的支持
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddWebSocketHub(this IServiceCollection services)
+        {
+            return services.AddSingleton<IHubProvider, HubProvider>();
+        }
+
+        /// <summary>
+        /// 提供AOP形式的依赖注册方法
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="assembly"></param>
+        /// <returns></returns>
         public static IServiceCollection AddAutoInJection(this IServiceCollection services, Assembly assembly)
         {
             if (assembly == null)

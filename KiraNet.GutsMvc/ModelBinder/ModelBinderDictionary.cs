@@ -7,34 +7,6 @@ namespace KiraNet.GutsMvc.ModelBinder
     public class ModelBinderDictionary : IDictionary<Type, IModelBinder>, IModelBinderProvider
     {
         private readonly Dictionary<Type, IModelBinder> _dictionary = new Dictionary<Type, IModelBinder>();
-        //private ModelBinderProviderCollection _modelBinderProviders;
-
-        //public ModelBinderDictionary()
-        //    : this(ModelBinderProviders.BinderProviders)
-        //{
-        //}
-
-        //internal ModelBinderDictionary(ModelBinderProviderCollection modelBinderProviders)
-        //{
-        //    _modelBinderProviders = modelBinderProviders;
-        //}
-
-        //public IModelBinder DefaultBinder
-        //{
-        //    get
-        //    {
-        //        if (_defaultBinder == null)
-        //        {
-        //            _defaultBinder = new OrdinaryModelBinder();
-        //        }
-
-        //        return _defaultBinder;
-        //    }
-        //    set
-        //    {
-        //        _defaultBinder = value;
-        //    }
-        //}
 
         public IModelBinder GetBinder(Type modelType)
         {

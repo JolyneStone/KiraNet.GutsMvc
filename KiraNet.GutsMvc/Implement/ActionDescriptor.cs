@@ -1,14 +1,11 @@
 ﻿using KiraNet.GutsMvc.Filter;
-using KiraNet.GutsMvc.Helper;
-using KiraNet.GutsMvc.Metadata;
+using KiraNet.GutsMvc.Infrastructure;
 using KiraNet.GutsMvc.ModelBinder;
 using KiraNet.GutsMvc.ModelValid;
-using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Collections.Generic;
 
 namespace KiraNet.GutsMvc.Implement
 {
@@ -64,73 +61,82 @@ namespace KiraNet.GutsMvc.Implement
                 return true;
             }
 
+            IModelBinderInvoker binderInvoker = new DefaultModelBinderInvoker();
+            IValueProvider valueProvider = ValueProviderFactories.Factories.GetValueProvider(controller.HttpContext);
             for (index = 0; index < paramDescriptors.Length; index++)
             {
-                var paramDescriptor = paramDescriptors[index];
-
-                if (!String.IsNullOrWhiteSpace(controller.ControllerContext.RouteEntity.ParameterValue) &&
-                    String.Equals(controller.ControllerContext.RouteEntity.DefaultParameter,
-                    paramDescriptors[index].ParameterName,
-                    StringComparison.OrdinalIgnoreCase))
+                if (binderInvoker.TryBindModel(controller.HttpContext, valueProvider, paramDescriptors[index].ParameterInfo, out var value))
                 {
-                    if (controller.ControllerContext.RouteEntity.ParameterValue != null)
-                    {
-                        TypeConverter converter = TypeDescriptor.GetConverter(paramDescriptor.ParameterType);
-                        try
-                        {
-                            var value = converter.ConvertTo(controller.ControllerContext.RouteEntity.ParameterValue, paramDescriptor.ParameterType);
-                            paramDescriptors[index].ParameterValue = value;
-                            continue;
-                        }
-                        catch
-                        {
-
-                        }
-                    }
-                }
-
-                var binderProviders = Services.GetRequiredService<IModelBinderProvider>();
-                var modelBinder = binderProviders.GetBinder(paramDescriptor.ParameterType);
-                var modelMetadata = Services.GetRequiredService<IModelMetadataProvider>().GetMetadataForType(null, paramDescriptor.ParameterType);
-                //var modelBinderModelBinders.Binders.GetBinder(paramDescriptor.ParameterType);
-
-                if (TryBindModel(modelBinder, modelMetadata, controller, "", out var paramValue))
-                {
-                    paramDescriptors[index].ParameterValue = paramValue;
-                    continue;
-                }
-
-                if (TryBindModel(modelBinder, modelMetadata, controller, paramDescriptor.ParameterName, out paramValue))
-                {
-                    paramDescriptors[index].ParameterValue = paramValue;
-                    continue;
-                }
-
-                // 尝试依赖注入
-                modelBinder = binderProviders.GetBinder(typeof(IServiceProvider));
-
-                if (TryBindModel(modelBinder, modelMetadata, controller, "", out paramValue))
-                {
-
-                    paramDescriptors[index].ParameterValue = paramValue;
-                    continue;
-                }
-
-                if (DefaultParamterValue.TryGetDefaultValue(paramDescriptor.ParameterInfo, out paramValue))
-                {
-                    // 注：默认值可能为Null
-                    paramDescriptors[index].ParameterValue = paramValue;
-                    continue;
-                }
-                else if(TypeHelper.IsNullableValueType(modelMetadata.ModelType))
-                {
-                    paramDescriptors[index].ParameterValue = null;
-                    continue;
+                    paramDescriptors[index].ParameterValue = value;
                 }
                 else
                 {
                     break;
                 }
+
+                //if (!String.IsNullOrWhiteSpace(controller.ControllerContext.RouteEntity.ParameterValue) &&
+                //    String.Equals(controller.ControllerContext.RouteEntity.DefaultParameter,
+                //    paramDescriptors[index].ParameterName,
+                //    StringComparison.OrdinalIgnoreCase))
+                //{
+                //    if (controller.ControllerContext.RouteEntity.ParameterValue != null)
+                //    {
+                //        TypeConverter converter = TypeDescriptor.GetConverter(paramDescriptor.ParameterType);
+                //        try
+                //        {
+                //            var value = converter.ConvertTo(controller.ControllerContext.RouteEntity.ParameterValue, paramDescriptor.ParameterType);
+                //            paramDescriptors[index].ParameterValue = value;
+                //            continue;
+                //        }
+                //        catch
+                //        {
+
+                //        }
+                //    }
+                //}
+
+                //var binderProviders = Services.GetRequiredService<IModelBinderProvider>();
+                //var modelBinder = binderProviders.GetBinder(paramDescriptor.ParameterType);
+                //var modelMetadata = Services.GetRequiredService<IModelMetadataProvider>().GetMetadataForType(null, paramDescriptor.ParameterType);
+                ////var modelBinderModelBinders.Binders.GetBinder(paramDescriptor.ParameterType);
+
+                //if (TryBindModel(modelBinder, modelMetadata, controller, "", out var paramValue))
+                //{
+                //    paramDescriptors[index].ParameterValue = paramValue;
+                //    continue;
+                //}
+
+                //if (TryBindModel(modelBinder, modelMetadata, controller, paramDescriptor.ParameterName, out paramValue))
+                //{
+                //    paramDescriptors[index].ParameterValue = paramValue;
+                //    continue;
+                //}
+
+                //// 尝试依赖注入
+                //modelBinder = binderProviders.GetBinder(typeof(IServiceProvider));
+
+                //if (TryBindModel(modelBinder, modelMetadata, controller, "", out paramValue))
+                //{
+
+                //    paramDescriptors[index].ParameterValue = paramValue;
+                //    continue;
+                //}
+
+                //if (DefaultParamterValue.TryGetDefaultValue(paramDescriptor.ParameterInfo, out paramValue))
+                //{
+                //    // 注：默认值可能为Null
+                //    paramDescriptors[index].ParameterValue = paramValue;
+                //    continue;
+                //}
+                //else if(TypeHelper.IsNullableValueType(modelMetadata.ModelType))
+                //{
+                //    paramDescriptors[index].ParameterValue = null;
+                //    continue;
+                //}
+                //else
+                //{
+                //    break;
+                //}
             }
 
             if (index < paramDescriptors.Length)
@@ -149,23 +155,23 @@ namespace KiraNet.GutsMvc.Implement
             return true;
         }
 
-        private bool TryBindModel(IModelBinder modelBinder, ModelMetadata modelMetadata, Controller controller, string modelName, out object value)
-        {
-            var bindingContext = new ModelBindingContext(controller.ValueProvider)
-            {
-                ModelName = modelName,
-                ModelMetadata = modelMetadata,
-            };
+        //private bool TryBindModel(IModelBinder modelBinder, ModelMetadata modelMetadata, Controller controller, string modelName, out object value)
+        //{
+        //    var bindingContext = new ModelBindingContext(controller.ValueProvider)
+        //    {
+        //        ModelName = modelName,
+        //        ModelMetadata = modelMetadata,
+        //    };
 
-            value = modelBinder
-                .BindModel(controller.ControllerContext, bindingContext);
+        //    value = modelBinder
+        //        .BindModel(controller.HttpContext, bindingContext);
 
-            if (value == null)
-            {
-                return false;
-            }
+        //    if (value == null)
+        //    {
+        //        return false;
+        //    }
 
-            return true;
-        }
+        //    return true;
+        //}
     }
 }

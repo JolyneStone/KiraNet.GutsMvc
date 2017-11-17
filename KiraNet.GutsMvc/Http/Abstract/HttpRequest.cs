@@ -27,6 +27,9 @@ namespace KiraNet.GutsMvc
         /// 包含请求中包含的查询数据
         /// </summary>
         public abstract NameValueCollection QueryString { get; }
+        /// <summary>
+        /// 重定位URL中的查询数据
+        /// </summary>
         public abstract NameValueCollection RedirectQueryString { get; internal set; }
         /// <summary>
         /// 指示是否应该保持连接的打开状态
