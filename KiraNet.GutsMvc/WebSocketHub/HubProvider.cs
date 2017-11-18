@@ -25,7 +25,7 @@ namespace KiraNet.GutsMvc.WebSocketHub
             }
 
             string subProtocol = defaultProtocol;
-            var protocols = hubType.GetCustomAttributes<HubProtocolAttribute>();
+            var protocols = hubType.GetCustomAttributes<HubProtocolAttribute>(true);
             WebSocket webSocket = null;
             if (protocols != null && protocols.Any())
             {
