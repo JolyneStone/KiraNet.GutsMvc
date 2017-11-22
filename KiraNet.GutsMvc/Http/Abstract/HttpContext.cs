@@ -11,10 +11,10 @@ namespace KiraNet.GutsMvc
     public abstract class HttpContext
     {
         public abstract IFeatureCollection HttpContextFeatures { get; }
-        public abstract IWebSocketFeature WebStocket { get; internal set; }
-        public abstract HttpRequest Request { get; internal set; }
-        public abstract HttpResponse Response { get; internal set; }
-        public abstract RouteContext Route { get; internal set; }
+        public abstract IWebSocketFeature WebStocket { get; protected set; }
+        public abstract HttpRequest Request { get; protected set; }
+        public abstract HttpResponse Response { get; protected set; }
+        public abstract RouteContext Route { get; protected set; }
         public abstract IPrincipal User { get; set; }
         public virtual RouteEntity RouteEntity
         {

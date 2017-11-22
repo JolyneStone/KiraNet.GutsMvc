@@ -75,23 +75,24 @@ namespace KiraNet.GutsMvc
             Listener.BeginGetContext(GetServerCallback<TContext>, application);
 
             var t = Task.Factory.StartNew(() =>
-             {
-                 IHttpListenerContextFeature feature = new HttpListenerContextFeature(httpListenerContext, Listener);
-                 IFeatureCollection contextFeatures = new FeatureCollection(Services)
-                     .Set<IHttpRequestFeature>(feature.RequestFeature)
-                     .Set<IHttpResponseFeature>(feature.ResponseFeature)
-                     .Set<IWebSocketFeature>(feature.WebSocketFeature);
+            {
+                IHttpListenerContextFeature feature = new HttpListenerContextFeature(httpListenerContext, Listener);
+                IFeatureCollection contextFeatures = new FeatureCollection(Services)
+                    .Set<IHttpRequestFeature>(feature.RequestFeature)
+                    .Set<IHttpResponseFeature>(feature.ResponseFeature)
+                    .Set<IWebSocketFeature>(feature.WebSocketFeature);
 
-                 TContext context = application.CreateContext(contextFeatures);
+                TContext context = application.CreateContext(contextFeatures);
 
-                 //await application.ProcessRequestAsync(context).ConfigureAwait(false).GetAwaiter().GetResult();
-                 //application.ProcessRequestAsync(context).ConfigureAwait(false).GetAwaiter()
-                 //.OnCompleted(() => context.Dispose());
-                 application.ProcessRequestAsync(context).ConfigureAwait(false).GetAwaiter().GetResult();
-                 return context;
-             });
+                //await application.ProcessRequestAsync(context).ConfigureAwait(false).GetAwaiter().GetResult();
+                //application.ProcessRequestAsync(context).ConfigureAwait(false).GetAwaiter()
+                //.OnCompleted(() => context.Dispose());
+                application.ProcessRequestAsync(context).ConfigureAwait(false).GetAwaiter().GetResult();
+                context.Dispose();
+                //return context;
+            });
 
-            (t.ConfigureAwait(false).GetAwaiter().GetResult()).Dispose();
+            //(t.ConfigureAwait(false).GetAwaiter().GetResult()).Dispose();
         }
     }
 }

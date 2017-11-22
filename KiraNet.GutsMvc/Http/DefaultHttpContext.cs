@@ -17,10 +17,10 @@ namespace KiraNet.GutsMvc
         /// 该属性是由服务器创建的用于封装原始HTTP上下文相关特性的对象
         /// </summary>
         public override IFeatureCollection HttpContextFeatures { get; }
-        public override IWebSocketFeature WebStocket { get; internal set; }
-        public override HttpRequest Request { get; internal set; }
-        public override HttpResponse Response { get; internal set; }
-        public override RouteContext Route { get; internal set; }
+        public override IWebSocketFeature WebStocket { get; protected set; }
+        public override HttpRequest Request { get; protected set; }
+        public override HttpResponse Response { get; protected set; }
+        public override RouteContext Route { get; protected set; }
         //public override RouteEntity RouteEntity { get; internal set ; }
         //public override RouteData RouteData { get; internal set; }
 

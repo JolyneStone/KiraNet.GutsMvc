@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace KiraNet.GutsMvc.Route
+﻿namespace KiraNet.GutsMvc.Route
 {
     public class RouteContext
     {
@@ -13,7 +9,6 @@ namespace KiraNet.GutsMvc.Route
         {
             HttpContext = context;
             Route = new Route();
-            context.Route = this;
         }
     }
 }

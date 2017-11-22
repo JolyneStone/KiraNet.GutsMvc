@@ -1,7 +1,6 @@
 ﻿using KiraNet.GutsMvc.Filter;
 using KiraNet.GutsMvc.Helper;
 using KiraNet.GutsMvc.Implement;
-using KiraNet.GutsMvc.Infrastructure;
 using KiraNet.GutsMvc.ModelValid;
 using KiraNet.GutsMvc.Route;
 using System;

@@ -35,9 +35,9 @@ namespace KiraNet.GutsMvc
 
         public IEnumerator<KeyValuePair<Type, object>> GetEnumerator()
         {
-            if(_features!=null)
+            if (_features != null)
             {
-                foreach(var feature in _features)
+                foreach (var feature in _features)
                 {
                     yield return feature;
                 }

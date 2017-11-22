@@ -33,32 +33,5 @@ namespace KiraNet.GutsMvc.Implement
         public ControllerContext(HttpContext httpContext) : this(httpContext, httpContext.RouteEntity)
         {
         }
-
-        //public virtual IList<IValueProviderFactory> ValueProviderFactories
-        //{
-        //    get
-        //    {
-        //        if (_valueProviderFactories == null)
-        //        {
-        //            _valueProviderFactories = new List<IValueProviderFactory>();
-        //        }
-
-        //        return _valueProviderFactories;
-        //    }
-        //    set => _valueProviderFactories = value ?? throw new ArgumentNullException(nameof(value));
-        //}
-
-        //internal ActionDescriptor SelectAction()
-        //{
-        //    if(ControllerDescriptor!=null)
-        //    {
-        //        new InvalidOperationException($"在{nameof(ControllerDescriptor)}属性被赋值前被使用");
-        //    }
-
-        //    foreach(var actionDescriptor in ControllerDescriptor.FindActions(this))
-        //    {
-
-        //    }
-        //}
     }
 }
