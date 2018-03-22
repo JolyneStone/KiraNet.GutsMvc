@@ -80,11 +80,11 @@ namespace KiraNet.GutsMvc.Implement
                 }
 
                 // Action方法返回值约束：
-                // 1. 返回不准为void
+                // 1. 返回不准为void或为ref引用返回
                 // 2. IActionResult或其实现类型
                 // 3. Task<T>，其中T为IActionResult或其实现类型
                 var result = method.ReturnType;
-                if (result == typeof(void))
+                if (result == typeof(void) || result.IsByRef)
                 {
                     continue;
                 }
@@ -127,13 +127,6 @@ namespace KiraNet.GutsMvc.Implement
                     continue;
                 }
 
-                //// 判断是否为WebStock连接请求
-                //if(IsWebSocket(context.HttpContext.Request, method))
-                //{
-                //    yield return new ActionDescriptor { Action = method, ActionName = method.Name.ToLower(), Services = Services };
-                //}
-
-
                 if (!Enum.TryParse<HttpMethod>(context.HttpContext.Request.HttpMethod.ToUpper(), out var routeMethod))
                 {
                     routeMethod = HttpMethod.GET;
@@ -156,29 +149,7 @@ namespace KiraNet.GutsMvc.Implement
                 {
                     yield return new ActionDescriptor { Action = method, ActionName = method.Name.ToLower(), Services = Services };
                 }
-
-                continue;
             }
         }
-
-        //private bool IsWebSocket(HttpRequest request, MethodInfo method)
-        //{
-        //    if (request == null)
-        //    {
-        //        return false;
-        //    }
-
-        //    if (method == null)
-        //    {
-        //        return false;
-        //    }
-
-        //    if (!request.IsWebSocketRequest)
-        //    {
-        //        return false;
-        //    }
-
-        //    return method.IsDefined(typeof(WebSocketAttribute), true);
-        //}
     }
 }

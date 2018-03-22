@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using KiraNet.GutsMvc.Infrastructure;
 
 namespace KiraNet.GutsMvc.View
 {
@@ -12,7 +13,7 @@ namespace KiraNet.GutsMvc.View
             {
                 if (String.IsNullOrWhiteSpace(_viewPath))
                 {
-                    _viewPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(),"Views");
+                    _viewPath = System.IO.Path.Combine(RootConfiguration.Root, "Views");
                 }
 
                 return _viewPath;

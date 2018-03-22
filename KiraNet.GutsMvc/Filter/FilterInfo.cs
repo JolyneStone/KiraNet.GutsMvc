@@ -6,6 +6,5 @@
         public T Filter { get; set; }
         public FilterScope Scope { get; set; }
         public int? Order { get; set; }
-
     }
 }

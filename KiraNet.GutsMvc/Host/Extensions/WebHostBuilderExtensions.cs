@@ -4,11 +4,18 @@ using System;
 using System.Linq;
 using System.Reflection;
 using KiraNet.GutsMvc.Helper;
+using KiraNet.GutsMvc.Infrastructure;
 
 namespace KiraNet.GutsMvc
 {
     public static class WebHostBuilderExtensions
     {
+        public static IWebHostBuilder InitialRoot(this IWebHostBuilder builder, string root)
+        {
+            RootConfiguration.InitialRoot(root);
+            return builder;
+        }
+
         public static IWebHostBuilder Configure(
             this IWebHostBuilder builder,
             Action<IServiceCollection> configureServices,

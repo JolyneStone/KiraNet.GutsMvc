@@ -1,4 +1,5 @@
-﻿using KiraNet.GutsMvc.StaticFiles;
+﻿using KiraNet.GutsMvc.Infrastructure;
+using KiraNet.GutsMvc.StaticFiles;
 using System;
 using System.IO;
 using System.Net;
@@ -16,7 +17,7 @@ namespace KiraNet.GutsMvc
             }
             var separator = Path.DirectorySeparatorChar;
             var path =
-                    Directory.GetCurrentDirectory() + separator +
+                    RootConfiguration.Root + separator +
                     httpContext.Request.RawUrl.ToString()
                     .Replace('/', separator);
 

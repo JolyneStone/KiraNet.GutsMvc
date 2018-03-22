@@ -38,7 +38,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NVelocity\NVelocity.csproj" />
+    <Reference Include="NVelocity">
+      <HintPath>..\NVelocity\bin\Release\netstandard2.0\NVelocity.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
