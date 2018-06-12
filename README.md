@@ -3,7 +3,7 @@
 基于.NET Standard开发的跨平台MVC框架
 
 
-![](https://github.com/zzq424/KiraNet.GutsMvc/tree/master/img/mvc.jpg)
+![找不到图片](https://github.com/zzq424/KiraNet.GutsMvc/blob/master/img/mvc.jpg)
 
 
 ******************************************************2017.10.18更新************************************************
