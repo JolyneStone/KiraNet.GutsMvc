@@ -49,7 +49,6 @@ namespace KiraNet.GutsMvc.Implement
                             return false;
                         }).FirstOrDefault();
 
-
                 if (controllerTypeInfo == null)
                 {                  
                     throw new NotFoundUrlException();
