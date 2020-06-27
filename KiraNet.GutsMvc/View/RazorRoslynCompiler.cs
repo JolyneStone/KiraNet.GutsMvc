@@ -95,7 +95,7 @@ namespace KiraNet.GutsMvc.View
 
             if (namespaces != null && namespaces.Length > 0)
             {
-                defaultNamespaces.AddRange(namespaces.Except(defaultNamespaces));
+                defaultNamespaces.AddRange(namespaces.Except(namespaces));
             }
 
             var options = ScriptOptions.Default
